@@ -1,0 +1,106 @@
+<title>BitCrystals Box</title>
+   
+         
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" language="Javascript" src="js/bootstrap.min.js"></script>
+    <script src="js/aes.js"></script>
+    <script src="js/biginteger.js"></script>
+    <script src="js/utxo.js"></script>
+    
+    
+    
+    <script src="js/xcp-js/transactions.js"></script>
+    <script src="js/xcp-js/rc4.js"></script>
+    <script src="js/xcp-js/convert-type.js"></script>
+    <script src="js/xcp-js/decode.js"></script>
+    <script src="popup.js"></script>
+
+    
+    <!-- from Countersign-->
+    <script src="js/mnemonic.js"></script>
+    <script src="js/bitcore/bitcore.min.js"></script>
+    <script src="js/bitcoinsig.js"></script>
+    <script src="js/brainlite.js"></script>
+    <script src="js/bitcoinjs-min.js"></script>
+    <script src="js/qrcode.min.js"></script>
+    
+    
+    <script src="ticker.js"></script> 
+
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    
+    <link rel="stylesheet" type="text/css" href="main.css" />
+  
+    
+    
+</head>
+<body>	
+
+
+<!--Game tab-->
+
+<div class="tab-pane" id="settingsPage">
+
+		<div style="margin-top: 15px; padding: 5px;">
+<div class="lead" align="center">Wallet Settings</div>
+			<a href="#" id="revealPassphrase" class="btn btn-primary btn-block keybutton">Connect Moonga account</a>
+            <div id="passphrasebox" style="display: none;">
+                <div id="newpassphrase">your passphrase</div>
+            </div>
+            <a href="#" id="manualPassphrase" class="btn btn-primary btn-block keybutton">Connect Spells of Genesis account</a>
+            <div id="manualPassBox" style="display: none; margin-bottom: 10px;">
+                    
+                    
+                <div class="row" style="padding: 0 10px 0 10px;">
+                    <div class="col-xs-9">
+                        <div style="width: 100%;"><input type="text" class="form-control" id="manualMnemonic" placeholder="Enter 12-word passphrase"></div>
+                        
+                    </div>
+                    <div class="col-xs-3">
+                        <button id="manualAddressButton" class="btn btn-default btn-block" style="width: 100%;">Go</button>
+                    </div>
+                    
+                    <div class="row" style="padding: 0 10px 0 10px;">
+                    <div class="col-xs-9">
+                        <div style="width: 100%;"><input type="text" class="form-control" id="manualMnemonic" placeholder="Nizga"></div>
+                        
+                    </div>
+                    <div class="col-xs-3">
+                        <button id="manualAddressButton" class="btn btn-default btn-block" style="width: 100%;">Go</button>
+                    </div>
+                    
+                </div>
+            </div>
+             
+            
+            <div class="hideEncrypted">
+            <a href="#" id="encryptPassphrase" class="btn btn-primary btn-block keybutton">Encrypt Wallet</a>
+            <div id="encryptPassphraseBox" style="display: none; margin-bottom: 10px;">
+                    
+                    
+                <div class="row" style="padding: 0 10px 0 10px;">
+                    <div class="col-xs-9">
+                        <div style="width: 100%;"><input type="password" class="form-control" id="encryptPassword" placeholder="Enter new password"></div>
+                    </div>
+                    <div class="col-xs-3">
+                        <button id="encryptPasswordButton" class="btn btn-default btn-block" style="width: 100%;">Go</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+            
+            
+                  <a href="#" style="margin-bottom: 15px;" class="btn btn-danger btn-block keybutton resetAddress">Reset Passphrase</a>  
+            
+            
+                    
+                </div>
+                
+
+		</div>
+        
+<!-- End game tab    -->   
+        
+        
+        </body>
