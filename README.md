@@ -1,13 +1,11 @@
-# LTB Companion Wallet
+# BitCrystals Box
 
-[![Join the chat at https://gitter.im/loon3/LTB-Companion-Wallet](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/loon3/LTB-Companion-Wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Moonga and Spells of Genesis game assets manager.
+Counterparty wallet
+
+
+Based on the work of LTB Network
+
 
 Chrome Extension Bitcoin/Counterparty Wallet for use with letstalkbitcoin.com
-
-Donate BTC, XCP or your favorite asset to 1LrM4bojLAKfuoFMXkDtVPMGydX1rkaMqH
-
-
-
-
-
 Please report all issues at https://github.com/loon3/LTB-Companion-Wallet/issues
