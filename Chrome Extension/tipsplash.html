@@ -3,38 +3,27 @@
 <html>
 <head>
 	
-<title>Send Tokens from LTB Companion Wallet</title>
-   
-         
-    <script src="js/jquery.min.js"></script>
-    <script type="text/javascript" language="Javascript" src="js/bootstrap.min.js"></script>
-    <script src="js/aes.js"></script>
-    <script src="js/biginteger.js"></script>
-    <script src="js/utxo.js"></script>
-    
-    
-    
-    <script src="js/xcp-js/transactions.js"></script>
-    <script src="js/xcp-js/rc4.js"></script>
-    <script src="js/xcp-js/convert-type.js"></script>
-    <script src="js/xcp-js/decode.js"></script>
-
-
-    
-    <!-- from Countersign-->
-    <script src="js/mnemonic.js"></script>
-    <script src="js/bitcore/bitcore.min.js"></script>
-    <script src="js/bitcoinsig.js"></script>
-    <script src="js/brainlite.js"></script>
-    <script src="js/bitcoinjs-min.js"></script>
-    <script src="js/qrcode.min.js"></script>
-    
-    
-    <script src="tipsplash.js"></script>
-    <script src="tipticker.js"></script>
-  
-    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
+<title>BitCrystals Box</title>
+        <script src="asset/js/plugins/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" language="Javascript" src="asset/js/plugins/bootstrap.min.js"></script>
+        <script src="asset/js/plugins/aes.js"></script>
+        <script src="asset/js/plugins/biginteger.js"></script>
+        <script src="asset/js/utxo.js"></script>
+        <script src="asset/js/plugins/xcp-js/transactions.js"></script>
+        <script src="asset/js/plugins/xcp-js/rc4.js"></script>
+        <script src="asset/js/plugins/xcp-js/convert-type.js"></script>
+        <script src="asset/js/plugins/xcp-js/decode.js"></script>
+        <!-- from Countersign-->
+        <script src="asset/js/plugins/mnemonic.js"></script>
+        <script src="asset/js/plugins/bitcore/bitcore.min.js"></script>
+        <script src="asset/js/plugins/bitcoinsig.js"></script>
+        <script src="asset/js/plugins/brainlite.js"></script>
+        <script src="asset/js/plugins/bitcoinjs-min.js"></script>
+        <script src="asset/js/plugins/qrcode.min.js"></script>
+        <script src="asset/js/tipsplash.js"></script>
+        <script src="asset/js/tipticker.js"></script>
+        <link rel="stylesheet" type="text/css" href="asset/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="asset/css/main.css" />
     
     <style>
     .assetname {
@@ -85,7 +74,7 @@
     <div id="btcbalhide" style="display: none;"></div>
     
     <div align="center" style="margin: auto; padding: 30px 0 10px 0;">
-        <img src='ltb-icon-orange-48.png'>
+        <img src='asset/img/pockets-128.png' height="80px" width="80px">
     </div>
     
     <div id="whitetipbox">
@@ -121,7 +110,7 @@
                 <form>
                 <div style="padding: 20px; background-color: rgba(0, 0, 0, 0.7);">
                     <div class="alert alert-warning alert-dismissible" role="alert" style="font-size: 14px;">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="margin: -10px -5px 0 0; z-index: 2;"><span aria-hidden="true">&times;</span></button><p style="font-size: 24px; font-weight: bold;">STOP!</p><p>Check for <b>chrome-extension://</b> in your browser address bar.</p><div align="center" style="padding: 10px 0 10px 0;"><img src="chromeinbar.png"></div><p>Do not proceed if you see <b>http</b> or <b>www</b></p></div>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="margin: -10px -5px 0 0; z-index: 2;"><span aria-hidden="true">&times;</span></button><p style="font-size: 24px; font-weight: bold;">STOP!</p><p>Check for <b>chrome-extension://</b> in your browser address bar.</p><div align="center" style="padding: 10px 0 10px 0;"><img src="asset/img/chromeinbar.png"></div><p>Do not proceed if you see <b>http</b> or <b>www</b></p></div>
                 <p class="lead" style="color: #fff;">Enter Wallet Password:</p>
                 <div style="width: 60%; padding: 5px 0 25px 0;"><input type="password" style="text-align: center; font-size: 20px;" class="form-control" id="inputPin"></div>
                 <div align="center"><button id="pinButton" type="submit" class="btn btn-primary">Open Wallet</button></div>
@@ -156,14 +145,16 @@
                     <div id="dropdown-working" style="display: none; height: 90px; padding-top: 10px;" align="center"><i class="fa fa-cog fa-spin fa-2x"></i></div>
                 </div>
 
-                <div class="row" style="width: 375px; margin: 30px auto; padding: 0 0 10px 0;">
-                    <div class="col-xs-12" align="center">
-                        <div class="input-group">
-                          <input type="text" class="form-control" placeholder="Send Amount" id="sendtoamount" style="border: 1px solid #BB827B; ">
-                          <span class="input-group-btn">
-                            <button id="sendtokenbutton" class="btn btn-success" type="button" style="border: 1px solid #BB827B; ">Send</button>
-                          </span>
-                        </div>
+                <div class="row" style="width: 350px; margin: 40px auto; padding: 0 0 0 0;">
+                    <div class="col-xs-12" align="center" style="background-color: #593E3B; padding: 15px 20px 20px 20px; border-radius: 15px; border: 4px solid #BB827B;">
+                        <div align="center" style="color: #fff; font-size: 20px; font-weight: bold; padding-bottom: 10px;">Enter Amount</div>
+                        <div style="padding: 10px 0 15px 0;"> 
+                          <input type="text" class="form-control" id="sendtoamount" placeholder="Amount of Tokens to Send" style="border: 1px solid #BB827B; text-align: center;">
+                             </div>
+                          <div>
+                            <button id="sendtokenbutton" class="btn btn-success" type="button" style="border: 1px solid #BB827B; ">Send <span class="displayedassetname"></span></button>
+                          </div>
+                       
                     </div>
 
                 </div>

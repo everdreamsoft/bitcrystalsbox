@@ -1,50 +1,59 @@
 {
-   "author": "Shaban Shaame",
+   "author": "Everdreamsoft",
    "background": {
-      "scripts": [ "js/jquery.min.js", "js/bitcoinjs-min.js" ]
+      "scripts": [ "asset/js/plugins/jquery.min.js", "asset/js/plugins/bitcoinjs-min.js" ]
    },
    "browser_action": {
-      "default_icon": "icon-crystalbox-128.png",
+      "default_icon": "asset/img/icon-crystalbox-128.png",
       "default_popup": "popup.html"
    },
-   "description": "Chrome Extension Bitcoin and Counterparty Wallet",
+   "description": "Chrome Extension BytCrystal and Counterparty Wallet",
    "icons": {
-      "128": "icon-crystalbox-128.png",
-      "16": "icon-crystalbox-16.png",
-      "48": "icon-crystalbox-48.png"
+      "128": "asset/img/icon-crystalbox-128.png",
+      "16": "asset/img/icon-crystalbox-16.png",
+      "48": "asset/img/icon-crystalbox-48.png"
    },
    "content_scripts": [
     {
-      "matches": ["https://letstalkbitcoin.com/*","https://chain.so/*","http://api.moonga.com/*"],
-      "js": ["js/jquery.min.js", "js/tipbutton.js"]
+      "matches": ["*://*/*"],
+      "js": ["asset/js/plugins/jquery.min.js", "asset/js/tipbutton.js"]
+    },
+    {
+      "matches": ["*://xcp.ninja/*"],
+      "js": ["asset/js/plugins/biginteger.js", "asset/js/issuancebutton.js"]
+    },
+    {
+      "matches": ["*://chain.so/*"],
+      "js": ["asset/js/plugins/biginteger.js", "asset/js/plugins/hex2dec-cs.js", "asset/js/detect.js"]
     }
    ],
    "web_accessible_resources": [
         "*.png",
         "tipsplash.html",
-        "js/jquery.min.js",
-        "js/bootstrap.min.js",
-        "js/aes.js",
-        "js/biginteger.js",
-        "js/utxo.js",
-        "js/xcp-js/transactions.js",
-        "js/xcp-js/rc4.js",
-        "js/xcp-js/convert-type.js",
-        "js/xcp-js/decode.js",
-        "popup.js",
-        "js/mnemonic.js",
-        "js/bitcore/bitcore.min.js",
-        "js/bitcoinsig.js",
-        "js/brainlite.js",
-        "js/bitcoinjs-min.js",
-        "js/qrcode.min.js",
-        "bootstrap.min.css",
-        "tipsplash.js",
-        "tipticker.js"
+        "issue-tx.html",
+        "asset/js/plugins/jquery.min.js",
+        "asset/js/plugins/bootstrap.min.js",
+        "asset/js/plugins/aes.js",
+        "asset/js/plugins/biginteger.js",
+        "asset/js/utxo.js",
+        "asset/js/plugins/xcp-js/transactions.js",
+        "asset/js/plugins/xcp-js/rc4.js",
+        "asset/js/plugins/xcp-js/convert-type.js",
+        "asset/js/plugins/xcp-js/decode.js",
+        "asset/js/popup.js",
+        "asset/js/plugins/mnemonic.js",
+        "asset/js/plugins/bitcore/bitcore.min.js",
+        "asset/js/plugins/bitcoinsig.js",
+        "asset/js/plugins/brainlite.js",
+        "asset/js/plugins/bitcoinjs-min.js",
+        "asset/js/plugins/qrcode.min.js",
+        "asset/css/bootstrap.min.css",
+        "asset/js/tipsplash.js",
+        "asset/js/tipticker.js"
    ],
    "manifest_version": 2,
    "name": "BitCrystals Companion Wallet",
-   "permissions": [ "storage", "clipboardWrite" ],
+   "permissions": [ "storage", "clipboardWrite", "downloads", "activeTab"  ],
    "short_name": "BitCrystals Companion Wallet",
-   "version": "0.4.0"
+   "version": "0.5.0"
 }
