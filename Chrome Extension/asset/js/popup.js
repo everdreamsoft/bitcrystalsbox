@@ -324,9 +324,9 @@ function getPrimaryBalanceXCP(pubkey, currenttoken) {
 
 	if (currenttoken.substr(0, 1) == "A") {
 	    var enhancedassetname = $("#xcpbalance").data("enhanced");
-	    $("#xcpbalance").html("<div id='currentbalance'>0</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 16px; font-weight: bold;'>" + enhancedassetname + "</div><div style='margin-top: 5px; font-size: 11px; font-style: italic;'>" + currenttoken + "</div>");
+	    $("#xcpbalance").html("<div id='currentbalance'>Loading...</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 16px; font-weight: bold;'>" + enhancedassetname + "</div><div style='margin-top: 5px; font-size: 11px; font-style: italic;'>" + currenttoken + "</div>");
 	} else {
-	    $("#xcpbalance").html("<div id='currentbalance'>0</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 22px; font-weight: bold;'>" + currenttoken + "</div>");
+	    $("#xcpbalance").html("<div id='currentbalance'>Loading...</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 22px; font-weight: bold;'>" + currenttoken + "</div>");
 	}
 	$('#assetbalhide').html(0);
 	getRate(0, pubkey, currenttoken);
@@ -380,109 +380,108 @@ function getPrimaryBalance(pubkey) {
 
 function getRate(assetbalance, pubkey, currenttoken) {
     if ($("#ltbPriceFlipped").html() == "...") {
-    //$.getJSON( "https://api.bitcoinaverage.com/ticker/USD/", function( data ) {
-    $.getJSON("http://btc.blockr.io/api/v1/exchangerate/current", function (data) {
-	//var btcprice = 1 / parseFloat(data.last);
-	var btcprice = parseFloat(data.data[0]["rates"]["BTC"]);
-	$("#ltbPrice").html(Number(btcprice.toFixed(4).toLocaleString('en')));
-	//var btcpriceflipped = data.last;
-	var btcpriceflipped = 1 / parseFloat(data.data[0]["rates"]["BTC"]);
-	$("#ltbPriceFlipped").html("$" + parseFloat(Math.round(btcpriceflipped * 100) / 100).toFixed(2));
-	$("#ltbPrice").data("btc", {price: btcprice.toFixed(6)});
-	if (currenttoken == "BTC") {
-	    //var usdValue = parseFloat(data.last) * parseFloat(assetbalance);
-	    var usdValue = parseFloat(btcpriceflipped) * parseFloat(assetbalance);
-	    $("#xcpfiatValue").html(usdValue.toFixed(2));
-	    $("#switchtoxcp").hide();
-	    $("#fiatvaluebox").show();
-	} else {
-	    $("#fiatvaluebox").hide();
-	    $("#switchtoxcp").show();
+	//$.getJSON( "https://api.bitcoinaverage.com/ticker/USD/", function( data ) {
+	//$.getJSON("http://btc.blockr.io/api/v1/exchangerate/current", function (data) {
+	var link = "http://coinmarketcap-nexuist.rhcloud.com/api/bcy/price";
+	if (currenttoken == "BTC"){
+	    link = "http://coinmarketcap-nexuist.rhcloud.com/api/btc/price";
 	}
-	chrome.storage.local.set({
-	    'btcperusd': btcprice
-	}, function () {
-	});
-//    $.getJSON( "http://www.coincap.io/front/xcp", function( data ) {
-//
-//            $.each(data, function(i, item) {
-//
-//                var assetname = data[i].short;
-//                 if (assetname == "LTBC") {
-//                    var ltbprice = 1 / parseFloat(data[i].price);
-//
-//                    $("#ltbPrice").html(Number(ltbprice.toFixed(0)).toLocaleString('en'));
-//                    $("#ltbPrice").data("ltbcoin", { price: ltbprice.toFixed(0) });
-//
-//                    if (currenttoken == "LTBCOIN") {
-//                        var usdValue = parseFloat(data[i].price) * parseFloat(assetbalance);
-//
-//                        $("#xcpfiatValue").html(usdValue.toFixed(2));
-//                        $("#switchtoxcp").hide();
-//                        $("#fiatvaluebox").show();
-//                    } else {
-//                        $("#fiatvaluebox").hide();
-//                        $("#switchtoxcp").show();
-//                    }
-//                 }
-//
-//            });
-//
-//    });
-	$.getJSON("http://www.coincap.io/front/", function (data) {
-	    var j = 0;
-	    var assetrates = new Array();
-	    $.each(data, function (i, item) {
-		var assetname = data[i].short;
-		var assetprice = data[i].price;
-		if (assetname == "LTBC") {
-		assetname = "LTBCOIN";
-			assetrates[j] = {assetname, assetprice};
-		j++;
+	console.log(currenttoken);
+	$.getJSON(link, function (data) {
+	    //var btcprice = 1 / parseFloat(data.last);
+	    var btcprice = parseFloat(data.usd);
+	    $("#ltbPrice").html(Number(btcprice.toFixed(4).toLocaleString('en')));
+	    //var btcpriceflipped = data.last;
+	    var btcpriceflipped = 1 / btcprice;
+	    $("#ltbPriceFlipped").html("$" + btcprice);
+	    $("#ltbPrice").data("btc", {price: btcprice.toFixed(6)});
+	    if (currenttoken == "BTC") {
+		//var usdValue = parseFloat(data.last) * parseFloat(assetbalance);
+		var usdValue = parseFloat(btcpriceflipped) * parseFloat(assetbalance);
+		$("#xcpfiatValue").html(usdValue.toFixed(2));
+		$("#switchtoxcp").hide();
+		$("#fiatvaluebox").show();
+	    } else {
+		if (currenttoken == "BITCRYSTALS") {
+		    var usdValue = parseFloat(btcpriceflipped) * parseFloat(assetbalance);
+		    $("#xcpfiatValue").html(usdValue.toFixed(2));
+		    $("#switchtoxcp").hide();
+		    $("#fiatvaluebox").show();
+		} else {
+		    $("#fiatvaluebox").hide();
+		    $("#switchtoxcp").show();
 		}
-		if (assetname == "XCP") {
-		assetrates[j] = {assetname, assetprice};
-		j++;
-		}
+	    }
+	    chrome.storage.local.set({
+		'btcperusd': btcprice
+	    }, function () {
 	    });
-	    $.getJSON("http://www.coincap.io/front/xcp", function (data) {
+	    $.getJSON("http://www.coincap.io/front/", function (data) {
+		var j = 0;
+		var assetrates = new Array();
 		$.each(data, function (i, item) {
 		    var assetname = data[i].short;
 		    var assetprice = data[i].price;
-		    if (assetname != "LTBC" && assetname != "XCP") {
-		    assetrates[i + j] = {assetname, assetprice};
+		    if (assetname == "LTBC") {
+			assetname = "LTBCOIN";
+			assetrates[j] = [assetname, assetprice];
+			j++;
+		    }
+		    if (assetname == "XCP") {
+			assetrates[j] = [assetname, assetprice];
+			j++;
 		    }
 		});
-		var currentdate = new Date();
-		var datetime = (currentdate.getMonth() + 1) + "/" + currentdate.getDate() + "/" + currentdate.getFullYear() + " at " + currentdate.getHours() + ":" + padprefix(currentdate.getMinutes(), 2);
-		chrome.storage.local.set({
-		    'assetrates': assetrates,
-		    'assetrates_updated': datetime
+		$.getJSON("http://www.coincap.io/front/xcp", function (data) {
+		    $.each(data, function (i, item) {
+			var assetname = data[i].short;
+			var assetprice = data[i].price;
+			if (assetname != "LTBC" && assetname != "XCP") {
+			    assetrates[i + j] = [assetname, assetprice];
+			}
+		    });
+		    var currentdate = new Date();
+		    var datetime = (currentdate.getMonth() + 1) + "/" + currentdate.getDate() + "/" + currentdate.getFullYear() + " at " + currentdate.getHours() + ":" + padprefix(currentdate.getMinutes(), 2);
+		    chrome.storage.local.set({
+			'assetrates': assetrates,
+			'assetrates_updated': datetime
+		    });
 		});
 	    });
 	});
-	});
     } else {
-    if (currenttoken == "BTC") {
-	var ltbrate = $("#ltbPrice").data("btc").price;
-	var usdrate = 1 / parseFloat(ltbrate);
-	var usdValue = usdrate * parseFloat(assetbalance);
-	$("#xcpfiatValue").html(usdValue.toFixed(2));
-	$("#switchtoxcp").hide();
-	$("#fiatvaluebox").show();
+	if (currenttoken == "BTC") {
+	    var ltbrate = $("#ltbPrice").data("btc").price;
+	    var usdrate = 1 / parseFloat(ltbrate);
+	    var usdValue = usdrate * parseFloat(assetbalance);
+	    $("#xcpfiatValue").html(usdValue.toFixed(2));
+	    $("#switchtoxcp").hide();
+	    $("#fiatvaluebox").show();
 //	} else if (currenttoken == "BTC") {
 //	    //var btcrate = $("#btcPrice").html();
 //	    //var usdValue = btcrate * parseFloat(assetbalance);
 //	    //$("#xcpfiatValue").html(usdValue.toFixed(2));
 //	    $("#fiatvaluebox").hide();
 //	    $("#switchtoxcp").show();
-    } else {
-	$("#fiatvaluebox").hide();
-	$("#switchtoxcp").show();
+	} else {
+	    if (currenttoken == "BITCRYSTALS"){
+		var ltbrate = $("#ltbPrice").data("btc").price;
+		var usdrate = 1 / parseFloat(ltbrate);
+		var usdValue = usdrate * parseFloat(assetbalance);
+		$("#xcpfiatValue").html(usdValue.toFixed(2));
+		$("#switchtoxcp").hide();
+		$("#fiatvaluebox").show();
+	    } else {
+		$("#fiatvaluebox").hide();
+		$("#switchtoxcp").show();
+	    }
 	}
     }
     getBTCBalance(pubkey);
 }
+
+
+
 
 
 function convertPassphrase(m) {
@@ -634,7 +633,7 @@ function loadAssets(add) {
 	console.log(data);
 	$.getJSON(source_html, function (data) {
 
-	    $("#allassets").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
+	    $("#allassets").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
 	    var isbtcloading = $("#isbtcloading").html();
 	    if (isbtcloading == "true") {
 		var btcbalance = "...";
@@ -650,7 +649,8 @@ function loadAssets(add) {
 	    }
 	    var xcpicon = "http://counterpartychain.io/content/images/icons/xcp.png";
 	    if (xcpbalance != 0) {
-		$("#allassets").append("<div class='col-xs-6'><div class='asset'><div class='row xcpasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='" + xcpicon + "'></div><div class='col-xs-9'><div class='assetname'>XCP</div><div class='assetqtybox'><div class='assetqty' style='background-color: #CF5151;'>" + xcpbalance + "</div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
+		xcpbalance = parseFloat(xcpbalance);
+		$("#allassets").append("<div class='col-xs-6'><div class='asset'><div class='row xcpasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='" + xcpicon + "'></div><div class='col-xs-9 assetdata'><div class='assetname'>XCP</div><div class='assetqtybox'><div class='assetqty' style='background-color: #CF5151;'>" + xcpbalance + "</div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
 	    }
 	    var totalassets = data.data;
 	    var countnumeric = 0;
@@ -673,16 +673,23 @@ function loadAssets(add) {
 		$.each(data.data, function (i, item) {
 		    var assetname = data.data[i].asset;
 		    var assetbalance = data.data[i].amount; //.balance for blockscan
+
 		    var assetdescription = data.data[i].description;
 		    if (assetbalance.indexOf(".") == -1) {
 			var divisible = "no";
 		    } else {
 			var divisible = "yes";
 		    }
+		    assetbalance = parseFloat(assetbalance);
 		    var iconname = assetname.toLowerCase();
 		    var iconlink = "http://counterpartychain.io/content/images/icons/" + iconname + ".png";
 		    if (assetname.charAt(0) != "A") {
-			var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row singleasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9'><div class='archiveasset'>Archive</div><div class='assetname'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #3082B0;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
+			var classname = 'singleasset';
+			if (assetname == "BITCRYSTALS") {
+			    classname = 'bcyasset';
+			}
+			var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row " + classname + "'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div class='assetname'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty amountbg'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
+
 			//3082B0
 			$("#allassets").append(assethtml);
 		    }
@@ -727,7 +734,7 @@ function loadAssets(add) {
 			}
 			if (isvaliddata == hash && matchingdata[i]["data"]["asset"] == assetname) {
 			    var enhancedname = matchingdata[i]["data"]["assetname"];
-			    var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + enhancedname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div>";
+			    var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + enhancedname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div>";
 			    $("#allassets").append(assethtml);
 			}
 		    } else {
@@ -737,7 +744,7 @@ function loadAssets(add) {
 			    console.log("Calculated Remote JSON Hash: " + isvaliddata);
 			    console.log("Stored Remote JSON Hash: " + hash);
 			    if (isvaliddata == hash && data.asset == assetname) {
-				var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + data.assetname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div></div></div>";
+				var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + data.assetname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div></div></div>";
 				allbvamdata = allbvamdata.concat({hash: hash, data: data});
 				if (missing == 1) {
 				    addBvam(allbvamdata);
@@ -1538,13 +1545,13 @@ function checkBvam(assetlist, countnumeric, callback) {
 
 function showBindWallet(email, pwd, user_id) {
     //first check if already bind
-    if (!checkifwalletbind(email, user_id)){
+    if (!checkifwalletbind(email, user_id)) {
 	welcomesplashShow();
 	$('#initialsplash').hide();
 	$('#bindwallet').show();
 	$('#bindwalletform').submit(function (e) {
 	    e.preventDefault();
-	    var source_html = "https://spellsofgenesis.com/simon/";
+	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?bind_wallet_address";
 	    var parameter = {email: email, password: pwd, xcp_pubkey: $('#bindwalletaddresses').val()};
 	    $.post(source_html + method, parameter, function (data) {
@@ -1554,7 +1561,7 @@ function showBindWallet(email, pwd, user_id) {
 		} else {
 		    if (data.message) {
 			if (data.message === "success") {
-			    saveuserid(user_id);
+			    saveuserid(user_id, email);
 			}
 		    }
 		}
@@ -1563,21 +1570,23 @@ function showBindWallet(email, pwd, user_id) {
     }
 }
 
-function checkifwalletbind(email, user_id){
-    var source_html = "https://spellsofgenesis.com/simon/";
+function checkifwalletbind(email, user_id) {
+    var source_html = "https://spellsofgenesis.com/api/";
     var method = "?get_wallet_address";
     var parameter = {email: email};
     $.post(source_html + method, parameter, function (data) {
+	console.log(data);
 	if (data.error) {
 	    return false;
 	} else {
 	    if (data.xcp_pubkey && (data.xcp_pubkey.length > 5)) {
-		saveuserid(user_id);
-		chrome.storage.local.set({
-		    'user_id': user_id
-		}, function () {
-		    return true;
-		});
+		saveuserid(user_id, email);
+		return true;
+//		chrome.storage.local.set({
+//		    'user_id': user_id
+//		}, function () {
+//		    return true;
+//		});
 	    } else {
 		return false;
 	    }
@@ -1586,9 +1595,49 @@ function checkifwalletbind(email, user_id){
 
 }
 
-function saveuserid(user_id) {
+
+
+function getUserCards() {
+    chrome.storage.local.get(["user_id", "user_email"], function (data) {
+	console.log(data);
+	if (data.user_id && data.user_email) {
+	    var source_html = "https://spellsofgenesis.com/api/";
+	    var method = "?get_user_cards";
+	    var parameter = {email: data.user_email};
+	    $.post(source_html + method, parameter, function (data) {
+		console.log(data);
+		if (data.error) {
+		    return false;
+		} else {
+		    $("#allcards").html("");
+		    $.each(data.cards, function (i, item) {
+			console.log(item);
+			$("#allcards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><div class='cardtitle'>" + item.asset + "</div><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.moonga_id + "_small.png'></div></div></div>");
+		    });
+		    //$("#allcards").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
+		}
+	    }, 'json');
+	} else {
+	    return null;
+	}
+    });
+}
+
+function checkIfConnected() {
+    chrome.storage.local.get(["user_id", "user_email"], function (data) {
+	console.log(data);
+	if (data.user_id && data.user_email) {
+	    return data;
+	} else {
+	    return null;
+	}
+    });
+}
+
+function saveuserid(user_id, email) {
     chrome.storage.local.set({
-	'user_id': user_id
+	'user_id': user_id,
+	'user_email': email
     }, function () {
 	$("#welcomesplash").hide();
 	$("#priceBox").show();
@@ -1596,7 +1645,7 @@ function saveuserid(user_id) {
     });
 }
 
-function hidelogin(){
+function hidelogin() {
     $('#form_login').hide();
     $('#alreadyconnected').show();
 }

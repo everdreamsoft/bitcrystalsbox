@@ -21,6 +21,7 @@
         <script src="asset/js/plugins/qrcode.min.js"></script>
         <script src="asset/js/ticker.js"></script> 
         <link rel="stylesheet" type="text/css" href="asset/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="asset/font-awesome/css/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="asset/css/main.css" />
     </head>
     <body>	
@@ -144,7 +145,9 @@
                 <ul class="nav nav-tabs" id="allTabs">
                     <li class="active" id="walletTab"><a id="walletLink" href="#walletPage" data-toggle="tab"><img src="asset/img/wallet_icon.png" height="24" width="24"></a></li>
                     <li id="inventoryTab"><a href="#inventoryPage" data-toggle="tab"><img src="asset/img/inventory_icon.png" height="24" width="24"></a></li>
+                    <li id="ganeTab"><a href="#gamePage" data-toggle="tab"><i class="fa fa-book tabicon"></i></a></li>
                     <li id="toolsTab"><a href="#toolsPage" data-toggle="tab"><img src="asset/img/apps.png" height="24" width="24"></a></li>
+                    
                     <!--    <li><a href="#gameTab" data-toggle="tab"><img src="key-icon.png" height="24" width="24"></a></li> 
                     -->    <li><a href="#settingsPage" data-toggle="tab"><img src="asset/img/key-icon.png" height="24" width="24"></a></li>   
                 </ul>
@@ -250,6 +253,15 @@
 
                         <!--<div id="hiddentokens"></div>
                         <div style="padding: 10px 0 40px 0;"><button id="hiddentokentoggle" class="btn btn-default btn-block btn-sm" style="width: 100%;">View Hidden Tokens</button></div>-->
+                    </div>
+                    <div class="tab-pane" id="gamePage">
+                        <div class="container">
+                            <div class="gamePageTitle">List of cards</div>
+                            <div id="allcards" style="padding-bottom: 20px;" class="row">
+                                
+                            </div>
+                            
+                        </div>
                     </div>
                     <div class="tab-pane" id="toolsPage">
                         <div class="row applink" style="padding: 15px 0 30px 0; width: 300px; margin: auto;">
@@ -518,11 +530,11 @@
                 <div id="priceBox" title="blockr.io">
 
                     <div id="ltbPrice" style="display: none;"></div><div id="ltbPriceFlipped">...</div>
-                    <div id="priceSrc">USD/BTC</div>
+                    <div id="priceSrc">USD/BCY</div>
                     <!--<div id="btcPrice" style="display: none;"></div>-->
                 </div>
             </div>
-            <div id="footer"><div id="nameversion" style="float: left; padding:1px 0 0 8px;"></div><img id="refreshWallet" src="asset/img/refresh.png" height="16" width="16"></div>       
+            <div id="footer"><div id="nameversion" style="float: left; padding:1px 0 0 8px;"></div><a href="#" id="testaction">test</a><img id="refreshWallet" src="asset/img/refresh.png" height="16" width="16"></div>       
 
         </div>
     </body>

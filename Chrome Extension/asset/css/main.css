@@ -331,10 +331,25 @@ filter: alpha(opacity=99); */
 }
 
 .singleasset {
-    background-color: #23688F;
+    background-color: #A4A4A4;
+    color: #fff;
+    padding: 4px 0 4px 0;
+    border: 3px solid #BDBDBD;
+}
+
+.bcyasset {
+    background-color: #365f91;
     color: #fff;
     padding: 4px 0 4px 0;
     border: 3px solid #67B5E0;
+}
+
+.singleasset .amountbg {
+    background-color: #BDBDBD;
+}
+
+.bcyasset .amountbg {
+    background-color: #67B5E0;
 }
 
 #tutorial_splash {
@@ -702,4 +717,43 @@ filter: alpha(opacity=99); */
 
 button, .btn {
     text-transform: capitalize;
+}
+
+.tabicon{
+    color: #000;
+    font-size: 21px;
+}
+
+.card_holder {
+    padding: 0;
+}
+
+.card_asset {
+    background-color: #fff;
+    padding: 5px;
+}
+
+.card_bg {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+}
+
+.card_bg img {
+    width: 100%;  
+}
+
+.cardtitle {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.gamePageTitle {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 1.4;
+    text-align: center;
 }

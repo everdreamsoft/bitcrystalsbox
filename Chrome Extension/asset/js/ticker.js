@@ -55,7 +55,7 @@ $(document).ready(function () {
     //on open
     var manifest = chrome.runtime.getManifest();
 
-    var infobutton = "<div style='display: inline-block; padding-left: 5px;'><a id='infoButton' href='#infoPage' data-toggle='tab'><img src='asset/img/info-icon.png' height='16' width='16'></a><div id='helpButton' style='display: inline-block; cursor: pointer; margin-left: 3px;'><img src='asset/img/help-icon.png' height='16' width='16'></div></div>";
+    var infobutton = "<div style='display: inline-block; padding-left: 5px;'><a id='infoButton' href='#infoPage' data-toggle='tab'><img src='asset/img/info-icon.png' height='16' width='16'></a></div>";
 
     $("#nameversion").html("BitCrystals Box v" + manifest.version + infobutton);
 
@@ -332,11 +332,13 @@ $(document).ready(function () {
 	if (email && pwd){
 	    //next step, check if valid
 	    console.log("yeah");
-	    var source_html = "https://spellsofgenesis.com/simon/";
+	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?get_user_id";
 	    var parameter = {email: email, password: pwd}; 
 	    $.post(source_html+method, parameter, function (data){
+		console.log(data);
 		if (data.error){
+		    
 		    $('#loginformerror').show();
 		    $('#loginformerror').html("The email or the password is not correct");
 		} else {
@@ -352,6 +354,22 @@ $(document).ready(function () {
 	}
     });
 
+
+    $('#testaction').click(function(){
+	var source_html = "https://spellsofgenesis.com/api/";
+	var method = "?get_wallet_address";
+	var parameter = {login: 'jody.hausmann@gmail.com'}; 
+	console.log('test');
+	$.post(source_html+method, parameter, function (data){
+	    console.log(data);
+	    if (data.error){
+		console.log(data);
+	    } else {
+		console.log(data);
+
+	    }
+	}, 'json');
+    });
 
     $('.addlabbuttons').click(function ()
     {
@@ -599,9 +617,14 @@ $(document).ready(function () {
     $(document).on("click", '.movetowallet', function (event)
     {
 	$("#currenttoken-pending").html("");
-
-	var $assetdiv = $(this).prev();
-
+	var temp = $(this).parent().parent();
+	var assetdata = temp.prev();
+	var $assetdiv;
+	if (assetdata.hasClass('assetdata')){
+	    $assetdiv = assetdata.find('.assetname');
+	} else {
+	    $assetdiv = $(this).prev();
+	}
 	var isnumeric = $assetdiv.data("numeric");
 
 	if (isnumeric != undefined) {
@@ -725,6 +748,11 @@ $(document).ready(function () {
 	loadAssets(address);
 
 
+    });
+    
+    $('#ganeTab').click(function (){
+	console.log("BLOP");
+	getUserCards(); 
     });
 
     $("#ltbUserSearch").keyup(function (event) {
