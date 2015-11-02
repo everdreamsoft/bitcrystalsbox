@@ -118,7 +118,7 @@ function getStorage() {
 		$(".bg").css("min-height", "200px");
 		$("#welcomesplash").hide();
 		if (data.user_id) {
-		    console.log("userid " + data.user_id);
+		    //console.log("userid " + data.user_id);
 		    hidelogin();
 		}
 		if (data.encrypted == false) {
@@ -131,7 +131,7 @@ function getStorage() {
 		    newPassphrase();
 		}
 	    } else {
-		console.log('encryptquestion')
+		//console.log('encryptquestion')
 		welcomesplashShow();
 		$('#initialsplash').hide();
 		$('#encryptquestion').show();
@@ -625,11 +625,11 @@ function manualPassphrase(passphrase) {
 function loadAssets(add) {
     //var source_html = "http://xcp.blockscan.com/api2?module=address&action=balance&btc_address="+add;
     var source_html = "https://counterpartychain.io/api/balances/" + add + "?description=1";
-    console.log(source_html);
+    //console.log(source_html);
     var xcp_source_html = "http://counterpartychain.io/api/address/" + add;
-    console.log(xcp_source_html);
+    //console.log(xcp_source_html);
     var btc_source_html = "https://insight.bitpay.com/api/addr/" + add + "/balance";
-    console.log(btc_source_html);
+    //console.log(btc_source_html);
     $("#alltransactions").html("<div align='center' style='margin: 40px 0 40px 0;' class='lead'>Loading...</div>");
     $("#allassets").html("<div align='center' style='margin: 40px 0 40px 0;' class='lead'>Loading...</div>");
     $.getJSON(xcp_source_html, function (data) {
@@ -638,7 +638,7 @@ function loadAssets(add) {
 	if (xcpbalance == 'NaN' || typeof xcpbalance === 'undefined') {
 	    xcpbalance = 0;
 	}
-	console.log(data);
+	//console.log(data);
 //	https://counterpartychain.io/api/balances/1PFZZFLhJ2dC5jG8tDTmcnmJZh3W1RfCzx?description=1
 //	http://counterpartychain.io/api/address/1PFZZFLhJ2dC5jG8tDTmcnmJZh3W1RfCzx
 //	https://insight.bitpay.com/api/addr/1PFZZFLhJ2dC5jG8tDTmcnmJZh3W1RfCzx/balance
@@ -1620,7 +1620,7 @@ function checkBvam(assetlist, countnumeric, callback) {
 
 function showBindWallet(email, pwd, user_id) {
     //first check if already bind
-    if (!checkifwalletbind(email, user_id)) {
+    //if (!checkifwalletbind(email, user_id)) {
 	welcomesplashShow();
 	$('#initialsplash').hide();
 	$('#bindwallet').show();
@@ -1630,6 +1630,7 @@ function showBindWallet(email, pwd, user_id) {
 	    var method = "?bind_wallet_address";
 	    var parameter = {login: email, password: pwd, xcp_pubkey: $('#bindwalletaddresses').val()};
 	    $.post(source_html + method, parameter, function (data) {
+		console.log(data);
 		if (data.error) {
 		    $('#loginformerror').show();
 		    $('#loginformerror').html(data.error);
@@ -1642,13 +1643,13 @@ function showBindWallet(email, pwd, user_id) {
 		}
 	    }, 'json');
 	});
-    }
+    //}
 }
 
 function checkifwalletbind(email, user_id) {
     var source_html = "https://spellsofgenesis.com/api/";
     var method = "?get_wallet_address";
-    var parameter = {email: email};
+    var parameter = {login: email};
     $.post(source_html + method, parameter, function (data) {
 	console.log(data);
 	if (data.error) {
@@ -1674,19 +1675,19 @@ function checkifwalletbind(email, user_id) {
 
 function getUserCards() {
     chrome.storage.local.get(["user_id", "user_email"], function (data) {
-	console.log(data);
+	//console.log(data);
 	if (data.user_id && data.user_email) {
 	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?get_user_cards";
 	    var parameter = {login: data.user_email};
 	    $.post(source_html + method, parameter, function (data) {
-		console.log(data);
+		//console.log(data);
 		if (data.error) {
 		    return false;
 		} else {
 		    $("#allcards").html("");
 		    $.each(data.cards, function (i, item) {
-			console.log(item);
+			//console.log(item);
 			$("#allcards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><div class='cardtitle'>" + item.asset + "</div><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.moonga_id + "_small.png'></div></div></div>");
 		    });
 		    //$("#allcards").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
@@ -1700,7 +1701,7 @@ function getUserCards() {
 
 function checkIfConnected() {
     chrome.storage.local.get(["user_id", "user_email"], function (data) {
-	console.log(data);
+	//console.log(data);
 	if (data.user_id && data.user_email) {
 	    return data;
 	} else {
@@ -1721,6 +1722,7 @@ function saveuserid(user_id, email) {
 }
 
 function hidelogin() {
+    $('#sogaccountmessage').hide();
     $('#form_login').hide();
     $('#alreadyconnected').show();
 }
