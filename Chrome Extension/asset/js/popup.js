@@ -254,7 +254,8 @@ function getBTCBalance(pubkey) {
  */
 function getPrimaryBalanceXCP(pubkey, currenttoken) {
 
-    $("#xcpbalance").html(currenttoken + 'current token');
+    $("#xcpbalance").html("<div id='currentbalance'>Loading...</div>");
+    //("#xcpbalance").html("<div id='currentbalance'>0</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 16px; font-weight: bold;'>" + enhancedassetname + "</div><div style='margin-top: 5px; font-size: 11px; font-style: italic;'>" + currenttoken + "</div>");
 
     //    var source_html = "https://insight.bitpay.com/api/sync";
     //
@@ -324,9 +325,9 @@ function getPrimaryBalanceXCP(pubkey, currenttoken) {
 
 	if (currenttoken.substr(0, 1) == "A") {
 	    var enhancedassetname = $("#xcpbalance").data("enhanced");
-	    $("#xcpbalance").html("<div id='currentbalance'>Loading...</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 16px; font-weight: bold;'>" + enhancedassetname + "</div><div style='margin-top: 5px; font-size: 11px; font-style: italic;'>" + currenttoken + "</div>");
+	    $("#xcpbalance").html("<div id='currentbalance'>0</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 16px; font-weight: bold;'>" + enhancedassetname + "</div><div style='margin-top: 5px; font-size: 11px; font-style: italic;'>" + currenttoken + "</div>");
 	} else {
-	    $("#xcpbalance").html("<div id='currentbalance'>Loading...</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 22px; font-weight: bold;'>" + currenttoken + "</div>");
+	    $("#xcpbalance").html("<div id='currentbalance'>0</div><div id='currenttoken-pending' class='unconfirmedbal'></div><br><div style='font-size: 22px; font-weight: bold;'>" + currenttoken + "</div>");
 	}
 	$('#assetbalhide').html(0);
 	getRate(0, pubkey, currenttoken);
@@ -379,96 +380,34 @@ function getPrimaryBalance(pubkey) {
 
 
 function getRate(assetbalance, pubkey, currenttoken) {
-    if ($("#ltbPriceFlipped").html() == "...") {
-	//$.getJSON( "https://api.bitcoinaverage.com/ticker/USD/", function( data ) {
-	//$.getJSON("http://btc.blockr.io/api/v1/exchangerate/current", function (data) {
-	var link = "http://coinmarketcap-nexuist.rhcloud.com/api/bcy/price";
-	if (currenttoken == "BTC"){
-	    link = "http://coinmarketcap-nexuist.rhcloud.com/api/btc/price";
-	}
-	console.log(currenttoken);
-	$.getJSON(link, function (data) {
-	    //var btcprice = 1 / parseFloat(data.last);
-	    var btcprice = parseFloat(data.usd);
-	    $("#ltbPrice").html(Number(btcprice.toFixed(4).toLocaleString('en')));
-	    //var btcpriceflipped = data.last;
-	    var btcpriceflipped = 1 / btcprice;
-	    $("#ltbPriceFlipped").html("$" + btcprice);
-	    $("#ltbPrice").data("btc", {price: btcprice.toFixed(6)});
-	    if (currenttoken == "BTC") {
-		//var usdValue = parseFloat(data.last) * parseFloat(assetbalance);
-		var usdValue = parseFloat(btcpriceflipped) * parseFloat(assetbalance);
-		$("#xcpfiatValue").html(usdValue.toFixed(2));
-		$("#switchtoxcp").hide();
-		$("#fiatvaluebox").show();
-	    } else {
-		if (currenttoken == "BITCRYSTALS") {
-		    var usdValue = parseFloat(btcpriceflipped) * parseFloat(assetbalance);
-		    $("#xcpfiatValue").html(usdValue.toFixed(2));
-		    $("#switchtoxcp").hide();
-		    $("#fiatvaluebox").show();
-		} else {
-		    $("#fiatvaluebox").hide();
-		    $("#switchtoxcp").show();
-		}
-	    }
-	    chrome.storage.local.set({
-		'btcperusd': btcprice
-	    }, function () {
-	    });
-	    $.getJSON("http://www.coincap.io/front/", function (data) {
-		var j = 0;
-		var assetrates = new Array();
-		$.each(data, function (i, item) {
-		    var assetname = data[i].short;
-		    var assetprice = data[i].price;
-		    if (assetname == "LTBC") {
-			assetname = "LTBCOIN";
-			assetrates[j] = [assetname, assetprice];
-			j++;
-		    }
-		    if (assetname == "XCP") {
-			assetrates[j] = [assetname, assetprice];
-			j++;
-		    }
-		});
-		$.getJSON("http://www.coincap.io/front/xcp", function (data) {
-		    $.each(data, function (i, item) {
-			var assetname = data[i].short;
-			var assetprice = data[i].price;
-			if (assetname != "LTBC" && assetname != "XCP") {
-			    assetrates[i + j] = [assetname, assetprice];
-			}
-		    });
-		    var currentdate = new Date();
-		    var datetime = (currentdate.getMonth() + 1) + "/" + currentdate.getDate() + "/" + currentdate.getFullYear() + " at " + currentdate.getHours() + ":" + padprefix(currentdate.getMinutes(), 2);
-		    chrome.storage.local.set({
-			'assetrates': assetrates,
-			'assetrates_updated': datetime
-		    });
-		});
-	    });
-	});
-    } else {
+    //if ($("#ltbPriceFlipped").html() == "...") {
+    //$.getJSON( "https://api.bitcoinaverage.com/ticker/USD/", function( data ) {
+    //$.getJSON("http://btc.blockr.io/api/v1/exchangerate/current", function (data) {
+    var link = "http://coinmarketcap-nexuist.rhcloud.com/api/bcy/price";
+    if (currenttoken == "BTC") {
+	link = "http://coinmarketcap-nexuist.rhcloud.com/api/btc/price";
+    }
+    //console.log(currenttoken);
+    $.getJSON(link, function (data) {
+	//var btcprice = 1 / parseFloat(data.last);
+	var btcprice = parseFloat(data.usd);
+	$("#ltbPrice").html(Number(btcprice.toFixed(3).toLocaleString('en')));
+	//var btcpriceflipped = data.last;
+	var btcpriceflipped = btcprice;
+	$("#ltbPriceFlipped").html("$" + Number(btcprice.toFixed(3).toLocaleString('en')));
+	$("#ltbPrice").data("btc", {price: btcprice.toFixed(6)});
 	if (currenttoken == "BTC") {
-	    var ltbrate = $("#ltbPrice").data("btc").price;
-	    var usdrate = 1 / parseFloat(ltbrate);
-	    var usdValue = usdrate * parseFloat(assetbalance);
+	    //var usdValue = parseFloat(data.last) * parseFloat(assetbalance);
+	    var usdValue = parseFloat(btcpriceflipped) * parseFloat(assetbalance);
 	    $("#xcpfiatValue").html(usdValue.toFixed(2));
+	    $("#priceSrc").html('USD/BTC');
 	    $("#switchtoxcp").hide();
 	    $("#fiatvaluebox").show();
-//	} else if (currenttoken == "BTC") {
-//	    //var btcrate = $("#btcPrice").html();
-//	    //var usdValue = btcrate * parseFloat(assetbalance);
-//	    //$("#xcpfiatValue").html(usdValue.toFixed(2));
-//	    $("#fiatvaluebox").hide();
-//	    $("#switchtoxcp").show();
 	} else {
-	    if (currenttoken == "BITCRYSTALS"){
-		var ltbrate = $("#ltbPrice").data("btc").price;
-		var usdrate = 1 / parseFloat(ltbrate);
-		var usdValue = usdrate * parseFloat(assetbalance);
+	    if (currenttoken == "BITCRYSTALS") {
+		var usdValue = parseFloat(btcpriceflipped) * parseFloat(assetbalance);
 		$("#xcpfiatValue").html(usdValue.toFixed(2));
+		$("#priceSrc").html('USD/BCY');
 		$("#switchtoxcp").hide();
 		$("#fiatvaluebox").show();
 	    } else {
@@ -476,7 +415,73 @@ function getRate(assetbalance, pubkey, currenttoken) {
 		$("#switchtoxcp").show();
 	    }
 	}
-    }
+	chrome.storage.local.set({
+	    'btcperusd': btcprice
+	}, function () {
+	});
+	$.getJSON("http://www.coincap.io/front/", function (data) {
+	    var j = 0;
+	    var assetrates = new Array();
+	    $.each(data, function (i, item) {
+		var assetname = data[i].short;
+		var assetprice = data[i].price;
+		if (assetname == "LTBC") {
+		    assetname = "LTBCOIN";
+		    assetrates[j] = [assetname, assetprice];
+		    j++;
+		}
+		if (assetname == "XCP") {
+		    assetrates[j] = [assetname, assetprice];
+		    j++;
+		}
+	    });
+	    $.getJSON("http://www.coincap.io/front/xcp", function (data) {
+		$.each(data, function (i, item) {
+		    var assetname = data[i].short;
+		    var assetprice = data[i].price;
+		    if (assetname != "LTBC" && assetname != "XCP") {
+			assetrates[i + j] = [assetname, assetprice];
+		    }
+		});
+		var currentdate = new Date();
+		var datetime = (currentdate.getMonth() + 1) + "/" + currentdate.getDate() + "/" + currentdate.getFullYear() + " at " + currentdate.getHours() + ":" + padprefix(currentdate.getMinutes(), 2);
+		chrome.storage.local.set({
+		    'assetrates': assetrates,
+		    'assetrates_updated': datetime
+		});
+	    });
+	});
+    });
+    //} 
+//    else {
+//	console.log($("#ltbPrice").data("btc").price);
+//	if (currenttoken == "BTC") {
+//	    var ltbrate = $("#ltbPrice").data("btc").price;
+//	    var usdrate = parseFloat(ltbrate);
+//	    var usdValue = usdrate * parseFloat(assetbalance);
+//	    $("#xcpfiatValue").html(usdValue.toFixed(2));
+//	    $("#switchtoxcp").hide();
+//	    $("#fiatvaluebox").show();
+////	} else if (currenttoken == "BTC") {
+////	    //var btcrate = $("#btcPrice").html();
+////	    //var usdValue = btcrate * parseFloat(assetbalance);
+////	    //$("#xcpfiatValue").html(usdValue.toFixed(2));
+////	    $("#fiatvaluebox").hide();
+////	    $("#switchtoxcp").show();
+//	} else {
+//	    if (currenttoken == "BITCRYSTALS"){
+//		var ltbrate = $("#ltbPrice").data("btc").price;
+//		var usdrate = parseFloat(ltbrate);
+//		var usdValue = usdrate * parseFloat(assetbalance);
+//		$("#xcpfiatValue").html(usdValue.toFixed(2));
+//		$("#switchtoxcp").hide();
+//		$("#fiatvaluebox").show();
+//	    } else {
+//		$("#fiatvaluebox").hide();
+//		$("#switchtoxcp").show();
+//	    }
+//	}
+//    }
     getBTCBalance(pubkey);
 }
 
@@ -620,8 +625,11 @@ function manualPassphrase(passphrase) {
 function loadAssets(add) {
     //var source_html = "http://xcp.blockscan.com/api2?module=address&action=balance&btc_address="+add;
     var source_html = "https://counterpartychain.io/api/balances/" + add + "?description=1";
+    console.log(source_html);
     var xcp_source_html = "http://counterpartychain.io/api/address/" + add;
+    console.log(xcp_source_html);
     var btc_source_html = "https://insight.bitpay.com/api/addr/" + add + "/balance";
+    console.log(btc_source_html);
     $("#alltransactions").html("<div align='center' style='margin: 40px 0 40px 0;' class='lead'>Loading...</div>");
     $("#allassets").html("<div align='center' style='margin: 40px 0 40px 0;' class='lead'>Loading...</div>");
     $.getJSON(xcp_source_html, function (data) {
@@ -631,6 +639,9 @@ function loadAssets(add) {
 	    xcpbalance = 0;
 	}
 	console.log(data);
+//	https://counterpartychain.io/api/balances/1PFZZFLhJ2dC5jG8tDTmcnmJZh3W1RfCzx?description=1
+//	http://counterpartychain.io/api/address/1PFZZFLhJ2dC5jG8tDTmcnmJZh3W1RfCzx
+//	https://insight.bitpay.com/api/addr/1PFZZFLhJ2dC5jG8tDTmcnmJZh3W1RfCzx/balance
 	$.getJSON(source_html, function (data) {
 
 	    $("#allassets").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
@@ -655,46 +666,48 @@ function loadAssets(add) {
 	    var totalassets = data.data;
 	    var countnumeric = 0;
 	    var addressbvam = new Array();
-	    for (var i = 0; i < totalassets.length; i++) {
-		var assetdescription = data.data[i].description;
-		var assetname = data.data[i].asset;
-		var assetbalance = data.data[i].amount;
-		if (assetdescription.substr(0, 6) == "TOKNID" && assetname.substring(0, 4) == "A111") {
-		    countnumeric++;
-		    var bvamhash = assetdescription.substr(7);
-		    addressbvam = addressbvam.concat({asset: assetname, amount: assetbalance, hash: bvamhash, data: ""});
-		}
-	    }
-	    console.log("Total BVAM: " + countnumeric);
-	    checkBvam(addressbvam, countnumeric, function (matchingdata, missing) {
-		console.log(matchingdata);
-		console.log("missing: " + missing);
-		var allbvamdata = new Array();
-		$.each(data.data, function (i, item) {
-		    var assetname = data.data[i].asset;
-		    var assetbalance = data.data[i].amount; //.balance for blockscan
-
+	    if (data.success != 0) {
+		for (var i = 0; i < totalassets.length; i++) {
 		    var assetdescription = data.data[i].description;
-		    if (assetbalance.indexOf(".") == -1) {
-			var divisible = "no";
-		    } else {
-			var divisible = "yes";
+		    var assetname = data.data[i].asset;
+		    var assetbalance = data.data[i].amount;
+		    if (assetdescription.substr(0, 6) == "TOKNID" && assetname.substring(0, 4) == "A111") {
+			countnumeric++;
+			var bvamhash = assetdescription.substr(7);
+			addressbvam = addressbvam.concat({asset: assetname, amount: assetbalance, hash: bvamhash, data: ""});
 		    }
-		    assetbalance = parseFloat(assetbalance);
-		    var iconname = assetname.toLowerCase();
-		    var iconlink = "http://counterpartychain.io/content/images/icons/" + iconname + ".png";
-		    if (assetname.charAt(0) != "A") {
-			var classname = 'singleasset';
-			if (assetname == "BITCRYSTALS") {
-			    classname = 'bcyasset';
-			}
-			var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row " + classname + "'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div class='assetname'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty amountbg'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
+		}
 
-			//3082B0
-			$("#allassets").append(assethtml);
-		    }
-		});
-		$.each(matchingdata, function (i, item) {
+		console.log("Total BVAM: " + countnumeric);
+		checkBvam(addressbvam, countnumeric, function (matchingdata, missing) {
+		    console.log(matchingdata);
+		    console.log("missing: " + missing);
+		    var allbvamdata = new Array();
+		    $.each(data.data, function (i, item) {
+			var assetname = data.data[i].asset;
+			var assetbalance = data.data[i].amount; //.balance for blockscan
+
+			var assetdescription = data.data[i].description;
+			if (assetbalance.indexOf(".") == -1) {
+			    var divisible = "no";
+			} else {
+			    var divisible = "yes";
+			}
+			assetbalance = parseFloat(assetbalance);
+			var iconname = assetname.toLowerCase();
+			var iconlink = "http://counterpartychain.io/content/images/icons/" + iconname + ".png";
+			if (assetname.charAt(0) != "A") {
+			    var classname = 'singleasset';
+			    if (assetname == "BITCRYSTALS") {
+				classname = 'bcyasset';
+			    }
+			    var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row " + classname + "'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div class='assetname'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty amountbg'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
+
+			    //3082B0
+			    $("#allassets").append(assethtml);
+			}
+		    });
+		    $.each(matchingdata, function (i, item) {
 //
 //
 //                    if (assetname.substring(0, 4) == "A111") {
@@ -711,62 +724,71 @@ function loadAssets(add) {
 //                            console.log(checkprefix);
 //
 //                            if(checkprefix == "TOKNID") {
-		    var hash = matchingdata[i]["hash"];
-		    var assetname = matchingdata[i]["asset"];
-		    var assetbalance = matchingdata[i]["amount"];
-		    var iconlink = "http://counterpartychain.io/content/images/icons/xcp.png";
-		    if (assetbalance.indexOf(".") == -1) {
-			var divisible = "no";
-		    } else {
-			var divisible = "yes";
-		    }
-		    if (matchingdata[i]["data"] != "") {
-			//local bvam
-			var isvaliddata = validateEnhancedAssetJSON(matchingdata[i]["data"]);
-			console.log("Calculated Local JSON Hash: " + isvaliddata);
-			console.log("Stored Local JSON Hash: " + hash);
-			if (isvaliddata != hash) {
-			    var jsondata = new Array();
-			    var jsondata = {ownername: matchingdata[i]["data"]["ownername"], ownertwitter: matchingdata[i]["data"]["ownertwitter"], owneraddress: matchingdata[i]["data"]["owneraddress"], asset: matchingdata[i]["data"]["asset"], assetname: matchingdata[i]["data"]["assetname"], assetdescription: matchingdata[i]["data"]["assetdescription"], assetwebsite: matchingdata[i]["data"]["assetwebsite"]};
-			    var isvaliddata = validateEnhancedAssetJSON(jsondata);
-			    console.log("Re-ordered Calculated Local JSON Hash: " + isvaliddata);
+			var hash = matchingdata[i]["hash"];
+			var assetname = matchingdata[i]["asset"];
+			var assetbalance = matchingdata[i]["amount"];
+			var iconlink = "http://counterpartychain.io/content/images/icons/xcp.png";
+			if (assetbalance.indexOf(".") == -1) {
+			    var divisible = "no";
+			} else {
+			    var divisible = "yes";
+			}
+			if (matchingdata[i]["data"] != "") {
+			    //local bvam
+			    var isvaliddata = validateEnhancedAssetJSON(matchingdata[i]["data"]);
+			    console.log("Calculated Local JSON Hash: " + isvaliddata);
 			    console.log("Stored Local JSON Hash: " + hash);
-			}
-			if (isvaliddata == hash && matchingdata[i]["data"]["asset"] == assetname) {
-			    var enhancedname = matchingdata[i]["data"]["assetname"];
-			    var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + enhancedname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div>";
-			    $("#allassets").append(assethtml);
-			}
-		    } else {
-			//get bvam
-			$.getJSON("http://xcp.ninja/hash/" + hash + ".json", function (data) {
-			    var isvaliddata = validateEnhancedAssetJSON(data);
-			    console.log("Calculated Remote JSON Hash: " + isvaliddata);
-			    console.log("Stored Remote JSON Hash: " + hash);
-			    if (isvaliddata == hash && data.asset == assetname) {
-				var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + data.assetname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div></div></div>";
-				allbvamdata = allbvamdata.concat({hash: hash, data: data});
+			    if (isvaliddata != hash) {
+				var jsondata = new Array();
+				var jsondata = {ownername: matchingdata[i]["data"]["ownername"], ownertwitter: matchingdata[i]["data"]["ownertwitter"], owneraddress: matchingdata[i]["data"]["owneraddress"], asset: matchingdata[i]["data"]["asset"], assetname: matchingdata[i]["data"]["assetname"], assetdescription: matchingdata[i]["data"]["assetdescription"], assetwebsite: matchingdata[i]["data"]["assetwebsite"]};
+				var isvaliddata = validateEnhancedAssetJSON(jsondata);
+				console.log("Re-ordered Calculated Local JSON Hash: " + isvaliddata);
+				console.log("Stored Local JSON Hash: " + hash);
+			    }
+			    if (isvaliddata == hash && matchingdata[i]["data"]["asset"] == assetname) {
+				var enhancedname = matchingdata[i]["data"]["assetname"];
+				var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + enhancedname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div>";
+				$("#allassets").append(assethtml);
+			    }
+			} else {
+			    //get bvam
+			    $.getJSON("http://xcp.ninja/hash/" + hash + ".json", function (data) {
+				var isvaliddata = validateEnhancedAssetJSON(data);
+				console.log("Calculated Remote JSON Hash: " + isvaliddata);
+				console.log("Stored Remote JSON Hash: " + hash);
+				if (isvaliddata == hash && data.asset == assetname) {
+				    var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + data.assetname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div></div></div>";
+				    allbvamdata = allbvamdata.concat({hash: hash, data: data});
+				    if (missing == 1) {
+					addBvam(allbvamdata);
+					console.log(allbvamdata);
+				    } else {
+					missing--;
+				    }
+				    $("#allassets").append(assethtml);
+				}
+			    }).fail(function () {
 				if (missing == 1) {
 				    addBvam(allbvamdata);
 				    console.log(allbvamdata);
 				} else {
 				    missing--;
 				}
-				$("#allassets").append(assethtml);
-			    }
-			}).fail(function () {
-			    if (missing == 1) {
-				addBvam(allbvamdata);
-				console.log(allbvamdata);
-			    } else {
-				missing--;
-			    }
-			});
-		    }
+			    });
+			}
 //                            }
 //                   }
+		    });
 		});
-	    });
+	    } else {
+		var classname = 'bcyasset';
+		var iconname = "BITCRYSTALS";
+		var iconlink = "http://counterpartychain.io/content/images/icons/" + iconname.toLowerCase() + ".png";
+		var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row " + classname + "'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div class='assetname'>BITCRYSTALS</div><div class='assetqtybox'><div class='assetqty amountbg'>0</div> <div class='BITCRYSTALS-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>no</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
+
+		//3082B0
+		$("#allassets").append(assethtml);
+	    }
 	    var xcp_mempool_html = "https://counterpartychain.io/api/mempool";
 	    $.getJSON(xcp_mempool_html, function (data) {
 		if (data.success == 1 && data.total > 0) {
@@ -1026,11 +1048,13 @@ function sendtokenaction() {
     }
     if (bitcore.Address.isValid(sendtoaddress)) {
 	if (isNaN(sendtoamount) == true || sendtoamount <= 0 || $.isNumeric(sendtoamount) == false) {
-	    $("#sendtoamount").val("Invalid Amount");
+	    $("#sendtokenerror").html("Invalid Amount");
+	    //$("#sendtoamount").val("Invalid Amount");
 	    $("#sendtokenbutton").html("Refresh to continue");
 	} else {
 	    if (totalsend > currentbalance) {
-		$("#sendtoamount").val("Insufficient Funds");
+		$("#sendtokenerror").html("Insufficient Funds");
+		//$("#sendtoamount").val("Insufficient Funds");
 		$("#sendtokenbutton").html("Refresh to continue");
 	    } else {
 		var txsAvailable = $("#txsAvailable").html();
@@ -1052,21 +1076,72 @@ function sendtokenaction() {
 	}
     } else {
 	var success = false;
-	var userid = $("#sendtoaddress").val().toLowerCase();
-	$.getJSON("http://api.moonga.com/RCT/cp/members/playerWallets/" + userid, function (data) {
-	    success = true;
-	    $("#sendtoaddress").val(data.Members["wallet_key"]);
-	    $("#debug").html('Wallet key gen ' + data.Members["wallet_key"]);
-	    sendtokenaction();
-	});
-	setTimeout(function () {
-	    if (!success) {
-		$("#sendtoaddress").val("Invalid Address");
-		$("#sendtokenbutton").html("Refresh to continue");
+	//var userid = $("#sendtoaddress").val().toLowerCase();
+
+	var source_html = "https://spellsofgenesis.com/api/";
+	var method = "?get_wallet_address";
+	var parameter = {login: $("#sendtoaddress").val()};
+	//console.log('test');
+	$.post(source_html + method, parameter, function (data) {
+	    console.log(data);
+	    if (data.error) {
+		console.log(data);
+	    } else {
+		if (data.xcp_pubkey === null) {
+		    console.log("error");
+		    $("#sendtokenerror").html("Invalid account or address");
+		    //$("#sendtoaddress").val("Invalid Address");
+		    $("#sendtokenbutton").html("Refresh to continue");
+		} else {
+		    if (isNaN(sendtoamount) == true || sendtoamount <= 0 || $.isNumeric(sendtoamount) == false) {
+			$("#sendtokenerror").html("Invalid Amount");
+			//$("#sendtoamount").val("Invalid Amount");
+			$("#sendtokenbutton").html("Refresh to continue");
+		    } else {
+			if (totalsend > currentbalance) {
+			    $("#sendtokenerror").html("Insufficient Funds");
+			    //$("#sendtoamount").val("Insufficient Funds");
+			    $("#sendtokenbutton").html("Refresh to continue");
+			} else {
+			    var txsAvailable = $("#txsAvailable").html();
+			    if (currenttoken == "BTC") {
+				sendBTC(pubkey, data.xcp_pubkey, sendtoamount, minersfee);
+			    } else if (txsAvailable > 1) {
+				var btc_total = 0.0000547; //total btc to receiving address
+				var msig_total = 0.000078; //total btc to multisig output (returned to sender)
+				var mnemonic = $("#newpassphrase").html();
+				$("#sendtokenbutton").html("Sending...");
+				//sendXCP(pubkey, sendtoaddress, currenttoken, sendtoamount, btc_total, msig_total, minersfee, mnemonic);
+				sendXCP_opreturn(pubkey, data.xcp_pubkey, currenttoken, sendtoamount, btc_total, minersfee, mnemonic);
+				//setUnconfirmed(pubkey, currenttoken, sendtoamount);
+			    }
+			    $("#sendtoaddress").prop('disabled', true);
+			    $("#sendtoamount").prop('disabled', true);
+			    //$("#sendtokenbutton").html("Sent! Refresh to continue...");
+			}
+		    }
+		}
+
 	    }
-	}, 1500);
+	}, 'json');
+
+
+//	$.getJSON("http://api.moonga.com/RCT/cp/members/playerWallets/" + userid, function (data) {
+//	    success = true;
+//	    $("#sendtoaddress").val(data.Members["wallet_key"]);
+//	    $("#debug").html('Wallet key gen ' + data.Members["wallet_key"]);
+//	    sendtokenaction();
+//	});
+//	setTimeout(function () {
+//	    if (!success) {
+//		$("#sendtoaddress").val("Invalid Address");
+//		$("#sendtokenbutton").html("Refresh to continue");
+//	    }
+//	}, 1500);
     }
 }
+
+
 
 
 function resetFive() {
@@ -1553,7 +1628,7 @@ function showBindWallet(email, pwd, user_id) {
 	    e.preventDefault();
 	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?bind_wallet_address";
-	    var parameter = {email: email, password: pwd, xcp_pubkey: $('#bindwalletaddresses').val()};
+	    var parameter = {login: email, password: pwd, xcp_pubkey: $('#bindwalletaddresses').val()};
 	    $.post(source_html + method, parameter, function (data) {
 		if (data.error) {
 		    $('#loginformerror').show();
@@ -1603,7 +1678,7 @@ function getUserCards() {
 	if (data.user_id && data.user_email) {
 	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?get_user_cards";
-	    var parameter = {email: data.user_email};
+	    var parameter = {login: data.user_email};
 	    $.post(source_html + method, parameter, function (data) {
 		console.log(data);
 		if (data.error) {

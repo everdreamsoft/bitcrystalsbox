@@ -703,7 +703,11 @@ filter: alpha(opacity=99); */
 }
 
 #form_login {
-    margin-top: 30px;
+    /*margin-top: 30px;*/
+}
+
+.btn-register{
+    margin-left: 12px;
 }
 
 #displaycurrentkey {

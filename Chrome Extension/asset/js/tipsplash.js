@@ -57,7 +57,7 @@ function getExtStorage()
        
         } else {
             
-            $("#tipsendcomplete").html("<div align='center'><div style='padding: 50px 0 30px 0; font-size: 18px; width: 480px;'>Click on the Tokenly Pockets icon to the right of your browser address bar to set up your wallet.</div><div><img src='setupss.png'></div></div>");
+            $("#tipsendcomplete").html("<div align='center'><div style='padding: 50px 0 30px 0; font-size: 18px; width: 480px;'>Click on the BitCrystals Box icon to the right of your browser address bar to set up your wallet.</div><div><img src='setupss.png'></div></div>");
             
             $("#yourtxid").hide();
         }

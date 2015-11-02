@@ -27,7 +27,7 @@ getExtStorage();
     
     var manifest = chrome.runtime.getManifest();
     
-    $("#nameversion").html("Tokenly Pockets v" + manifest.version);
+    $("#nameversion").html("BitCrystals Box v" + manifest.version);
     
     
     var JsonFormatter = {

@@ -1,5 +1,5 @@
 {
-   "author": "Everdreamsoft",
+   "author": "EverdreamSoft",
    "background": {
       "scripts": [ "asset/js/plugins/jquery.min.js", "asset/js/plugins/bitcoinjs-min.js" ]
    },
@@ -7,7 +7,7 @@
       "default_icon": "asset/img/icon-crystalbox-128.png",
       "default_popup": "popup.html"
    },
-   "description": "Chrome Extension BytCrystal and Counterparty Wallet",
+   "description": "Chrome Extension BytCrystals and Counterparty Wallet",
    "icons": {
       "128": "asset/img/icon-crystalbox-128.png",
       "16": "asset/img/icon-crystalbox-16.png",
@@ -52,8 +52,8 @@
         "asset/js/tipticker.js"
    ],
    "manifest_version": 2,
-   "name": "BitCrystals Companion Wallet",
+   "name": "BitCrystals Box",
    "permissions": [ "storage", "clipboardWrite", "downloads", "activeTab"  ],
-   "short_name": "BitCrystals Companion Wallet",
+   "short_name": "BitCrystals Box",
    "version": "0.5.0"
 }

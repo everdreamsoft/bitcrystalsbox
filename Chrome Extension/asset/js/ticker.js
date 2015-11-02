@@ -334,7 +334,7 @@ $(document).ready(function () {
 	    console.log("yeah");
 	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?get_user_id";
-	    var parameter = {email: email, password: pwd}; 
+	    var parameter = {login: email, password: pwd}; 
 	    $.post(source_html+method, parameter, function (data){
 		console.log(data);
 		if (data.error){
@@ -357,8 +357,8 @@ $(document).ready(function () {
 
     $('#testaction').click(function(){
 	var source_html = "https://spellsofgenesis.com/api/";
-	var method = "?get_wallet_address";
-	var parameter = {login: 'jody.hausmann@gmail.com'}; 
+	var method = "?get_user_cards";
+	var parameter = {email: 'jody.hausmann@gmail.com'}; 
 	console.log('test');
 	$.post(source_html+method, parameter, function (data){
 	    console.log(data);
@@ -789,25 +789,22 @@ $(document).ready(function () {
     });
 
 
-    $(document).on("click", '#encryptPasswordButton', function (event)
-    {
-	chrome.storage.local.get(["passphrase"], function (data)
-	{
-
+    $(document).on("click", '#encryptPasswordButton', function (event) {
+	chrome.storage.local.get(["passphrase"], function (data) {
+	    $('#encryptPassphraseBoxError').html();
 	    var password = $("#encryptPassword").val();
 	    $("#encryptPassword").val("");
-	    var encrypted = CryptoJS.AES.encrypt(data.passphrase, password, {format: JsonFormatter});
-
-	    chrome.storage.local.set(
-		    {
-			'passphrase': encrypted,
-			'encrypted': true
-
-		    }, function () {
-
-		$(".hideEncrypted").hide();
-
-	    });
+	    if (password.length >= 6) {
+		var encrypted = CryptoJS.AES.encrypt(data.passphrase, password, {format: JsonFormatter});
+		chrome.storage.local.set({
+			    'passphrase': encrypted,
+			    'encrypted': true
+			}, function () {
+		    $(".hideEncrypted").hide();
+		});
+	    } else {
+		$('#encryptPassphraseBoxError').html("The password must contain at least 6 char.");
+	    }
 
 	});
     });
@@ -844,8 +841,8 @@ $(document).ready(function () {
 	$("#preSign").show();
     });
 
-    $('#sendtokenbutton').click(function ()
-    {
+    $('#sendtokenbutton').click(function () {
+	$('#sendtokenerror').html();
 	sendtokenaction();
     });
 
@@ -899,7 +896,7 @@ $(document).ready(function () {
 		    return $(this).val();
 		}).length > 0) {
 
-		    var ltbtousd = $("#ltbPrice").data("bitcrystals").price;
+		    var ltbtousd = $("#ltbPrice").data("btc").price;
 		    var sendinusd = sendamount / parseFloat(ltbtousd);
 
 		    $("#sendUSD").html("($" + sendinusd.toFixed(2) + ")");

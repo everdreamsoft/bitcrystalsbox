@@ -22,7 +22,7 @@ fileChooser.addEventListener('change', function (evt) {
                         'imported_labels': jsonObj
                     }, function () {
                     
-                       window.alert("Addresses Imported! You must re-open Tokenly Pockets."); 
+                       window.alert("Addresses Imported! You must re-open the BitCrystalsBox Pockets."); 
 
          
                     });  
