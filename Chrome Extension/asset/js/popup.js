@@ -1019,7 +1019,8 @@ function isAdressValid() {
 }
 
 function sendtokenaction() {
-    $("#sendtokenbutton").html("Sending...");
+    var currentbuttonlabel = $("#sendtokenbutton").html();
+    //$("#sendtokenbutton").html("Sending...");
     $("#sendtokenbutton").prop('disabled', true);
 //            var assetbalance = $("#xcpbalance").html();
 //            var array = assetbalance.split(" ");
@@ -1093,32 +1094,39 @@ function sendtokenaction() {
 		    //$("#sendtoaddress").val("Invalid Address");
 		    $("#sendtokenbutton").html("Refresh to continue");
 		} else {
-		    if (isNaN(sendtoamount) == true || sendtoamount <= 0 || $.isNumeric(sendtoamount) == false) {
-			$("#sendtokenerror").html("Invalid Amount");
-			//$("#sendtoamount").val("Invalid Amount");
-			$("#sendtokenbutton").html("Refresh to continue");
-		    } else {
-			if (totalsend > currentbalance) {
-			    $("#sendtokenerror").html("Insufficient Funds");
-			    //$("#sendtoamount").val("Insufficient Funds");
+		    if (bitcore.Address.isValid(data.xcp_pubkey)) {
+			if (isNaN(sendtoamount) == true || sendtoamount <= 0 || $.isNumeric(sendtoamount) == false) {
+			    $("#sendtokenerror").html("Invalid Amount");
+			    //$("#sendtoamount").val("Invalid Amount");
 			    $("#sendtokenbutton").html("Refresh to continue");
 			} else {
-			    var txsAvailable = $("#txsAvailable").html();
-			    if (currenttoken == "BTC") {
-				sendBTC(pubkey, data.xcp_pubkey, sendtoamount, minersfee);
-			    } else if (txsAvailable > 1) {
-				var btc_total = 0.0000547; //total btc to receiving address
-				var msig_total = 0.000078; //total btc to multisig output (returned to sender)
-				var mnemonic = $("#newpassphrase").html();
-				$("#sendtokenbutton").html("Sending...");
-				//sendXCP(pubkey, sendtoaddress, currenttoken, sendtoamount, btc_total, msig_total, minersfee, mnemonic);
-				sendXCP_opreturn(pubkey, data.xcp_pubkey, currenttoken, sendtoamount, btc_total, minersfee, mnemonic);
-				//setUnconfirmed(pubkey, currenttoken, sendtoamount);
+			    if (totalsend > currentbalance) {
+				$("#sendtokenerror").html("Insufficient Funds");
+				//$("#sendtoamount").val("Insufficient Funds");
+				$("#sendtokenbutton").html("Refresh to continue");
+			    } else {
+				var txsAvailable = $("#txsAvailable").html();
+				if (currenttoken == "BTC") {
+				    sendBTC(pubkey, data.xcp_pubkey, sendtoamount, minersfee);
+				} else if (txsAvailable > 1) {
+				    $("#sendtoaddress").val(data.xcp_pubkey);
+				    var btc_total = 0.0000547; //total btc to receiving address
+				    var msig_total = 0.000078; //total btc to multisig output (returned to sender)
+				    var mnemonic = $("#newpassphrase").html();
+				    $("#sendtokenbutton").html("Sending...");
+				    //sendXCP(pubkey, sendtoaddress, currenttoken, sendtoamount, btc_total, msig_total, minersfee, mnemonic);
+				    sendXCP_opreturn(pubkey, data.xcp_pubkey, currenttoken, sendtoamount, btc_total, minersfee, mnemonic);
+				    //setUnconfirmed(pubkey, currenttoken, sendtoamount);
+				}
+				$("#sendtoaddress").prop('disabled', true);
+				$("#sendtoamount").prop('disabled', true);
+				//$("#sendtokenbutton").html("Sent! Refresh to continue...");
 			    }
-			    $("#sendtoaddress").prop('disabled', true);
-			    $("#sendtoamount").prop('disabled', true);
-			    //$("#sendtokenbutton").html("Sent! Refresh to continue...");
 			}
+		    } else {
+			$("#sendtokenerror").html("Invalid account or address");
+			//$("#sendtoaddress").val("Invalid Address");
+			$("#sendtokenbutton").html("Refresh to continue");
 		    }
 		}
 
@@ -1621,54 +1629,47 @@ function checkBvam(assetlist, countnumeric, callback) {
 function showBindWallet(email, pwd, user_id) {
     //first check if already bind
     //if (!checkifwalletbind(email, user_id)) {
-	welcomesplashShow();
-	$('#initialsplash').hide();
-	$('#bindwallet').show();
-	$('#bindwalletform').submit(function (e) {
-	    e.preventDefault();
-	    var source_html = "https://spellsofgenesis.com/api/";
-	    var method = "?bind_wallet_address";
-	    var parameter = {login: email, password: pwd, xcp_pubkey: $('#bindwalletaddresses').val()};
-	    $.post(source_html + method, parameter, function (data) {
-		console.log(data);
-		if (data.error) {
-		    $('#loginformerror').show();
-		    $('#loginformerror').html(data.error);
-		} else {
-		    if (data.message) {
-			if (data.message === "success") {
-			    saveuserid(user_id, email);
-			}
+    welcomesplashShow();
+    $('#initialsplash').hide();
+    $('#bindwallet').show();
+    $('#bindwalletform').submit(function (e) {
+	e.preventDefault();
+	var source_html = "https://spellsofgenesis.com/api/";
+	var method = "?bind_wallet_address";
+	var parameter = {login: email, password: pwd, xcp_pubkey: $('#bindwalletaddresses').val()};
+	$.post(source_html + method, parameter, function (data) {
+	    console.log(data);
+	    if (data.error) {
+		$('#loginformerror').show();
+		$('#loginformerror').html(data.error);
+	    } else {
+		if (data.message) {
+		    if (data.message === "success") {
+			saveuserid(user_id, email);
 		    }
 		}
-	    }, 'json');
-	});
+	    }
+	}, 'json');
+    });
     //}
 }
 
-function checkifwalletbind(email, user_id) {
+function checkifwalletbind(email, user_id, pwd) {
     var source_html = "https://spellsofgenesis.com/api/";
     var method = "?get_wallet_address";
     var parameter = {login: email};
     $.post(source_html + method, parameter, function (data) {
-	console.log(data);
 	if (data.error) {
-	    return false;
+	    $('#loginformerror').show();
+	    $('#loginformerror').html(data.error);
 	} else {
-	    if (data.xcp_pubkey && (data.xcp_pubkey.length > 5)) {
+	    if (data.xcp_pubkey !== null && (data.xcp_pubkey.length > 5)) {
 		saveuserid(user_id, email);
-		return true;
-//		chrome.storage.local.set({
-//		    'user_id': user_id
-//		}, function () {
-//		    return true;
-//		});
 	    } else {
-		return false;
+		showBindWallet(email, pwd, user_id);
 	    }
 	}
     }, 'json');
-
 }
 
 

@@ -147,13 +147,19 @@ filter: alpha(opacity=99); */
 #priceBox
 {
     position: absolute;
-    right: 2px;
+    right: 17px;
     font-size: 16px;
     top: 0px;
     padding: 7px 5px 0 0;
 
     color: #616161;
     text-align: center;
+}
+
+#priceBox img {
+    height: 24px;
+    width: 24px;
+    margin-top: 6px;
 }
 
 #priceSrc
@@ -177,7 +183,7 @@ filter: alpha(opacity=99); */
 
 #transTools 
 {
-    margin: 15px 5px 10px 5px;
+    /*margin: 15px 5px 10px 5px;*/
     padding: 0 20px 0 20px;
 }
 
@@ -220,12 +226,12 @@ filter: alpha(opacity=99); */
 {
     background-color: #FFF;
 
-    padding: 5px;
+   
     display: block;
-    border-radius: 5px;
+
     text-align: center;
-    margin-top: 10px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 
 }
 

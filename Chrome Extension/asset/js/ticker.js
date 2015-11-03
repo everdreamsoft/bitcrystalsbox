@@ -344,7 +344,8 @@ $(document).ready(function () {
 		} else {
 		    if (data.user_id){
 			//go to next page
-			showBindWallet(email, pwd, data.user_id);
+			//showBindWallet(email, pwd, data.user_id);
+			checkifwalletbind(email, data.user_id, pwd);
 		    }
 		}
 	    }, 'json');
@@ -357,8 +358,8 @@ $(document).ready(function () {
 
     $('#testaction').click(function(){
 	var source_html = "https://spellsofgenesis.com/api/";
-	var method = "?get_user_cards";
-	var parameter = {email: 'jody.hausmann@gmail.com'}; 
+	var method = "?get_wallet_address";
+	var parameter = {login: 'jody.hausmann@gmail.ch'}; 
 	console.log('test');
 	$.post(source_html+method, parameter, function (data){
 	    console.log(data);
@@ -564,6 +565,8 @@ $(document).ready(function () {
 	$("#sendtoaddress").val("");
 	$("#sendtoamount").val("");
 	$(".sendlabel").html("");
+	
+	$("#sendtokenerror").html("");
 
 	var assetbalance = $("#xcpbalance").html();
 	var array = assetbalance.split(" ");
@@ -867,11 +870,12 @@ $(document).ready(function () {
     });
 
 
-    $(document).on("keyup mouseup", '#sendtoamount', function (event)
-    {
-
+    $(document).on("keyup mouseup", '#sendtoamount', function (event) {
+	   console.log("event");
 	var sendamount = parseFloat($("#sendtoamount").val());
+	
 	if (!isNaN(sendamount) && sendamount > 0) {
+	    console.log("event 2");
 	    var currenttoken = $(".currenttoken").html();
 
 	    if (currenttoken == "BTC") {
@@ -885,8 +889,10 @@ $(document).ready(function () {
 
 	    if (sendamount > currentbalance) {
 		$('#sendtokenbutton').prop('disabled', true);
+		$("#sendtokenerror").html("Insufficient Funds");
 	    } else {
 		$("#sendtokenbutton").removeAttr("disabled");
+		$("#sendtokenerror").html("");
 	    }
 
 
@@ -911,6 +917,8 @@ $(document).ready(function () {
 		$("#sendUSD").html("");
 
 	    }
+	} else {
+	    $('#sendtokenbutton').prop('disabled', true);
 	}
 
     });
