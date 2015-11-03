@@ -282,7 +282,7 @@ $(document).ready(function () {
 	    'firstopen': false,
 	    'setupdone': true
 	}, function () {
-
+	    $('#encryptquestion').hide();
 	    getStorage();
 	    $("#welcomesplash").hide();
 	    //$("#tutorial_splash").show();
