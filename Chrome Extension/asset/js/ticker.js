@@ -176,6 +176,7 @@ $(document).ready(function () {
     });
 
     $('#setpinatsplash').click(function () {
+	//e.preventDefault();
 	var password = $("#inputSplashPass").val();
 	if (password.length >= 6) {
 	    chrome.storage.local.get(["passphrase"], function (data) {
@@ -185,11 +186,12 @@ $(document).ready(function () {
 			    'encrypted': true,
 			    'setupdone': true
 			}, function () {
-			    getStorage();
-		    //$("#welcomesplash").hide();
+			//getStorageSetup();
+		    $("#welcomesplash").hide();
 		    //$("#tutorial_splash").show();
-		    //$(".hideEncrypted").hide();
-		    //$(".bg").css("min-height", "200px");
+		    $(".hideEncrypted").hide();
+		    $(".bg").css("min-height", "200px");
+		    existingPassphrase(data.passphrase);
 		});
 	    });
 	} else {
@@ -199,6 +201,10 @@ $(document).ready(function () {
 		$('#passwordentererror').html('The password is too short');
 	    }
 	}
+    });
+
+    $('#encryptyesform').submit(function(e){
+	e.preventDefault();
     });
 
     $('#setupWalletButton').click(function () {
@@ -887,7 +893,7 @@ $(document).ready(function () {
     
     $(document).on("keyup", '#inputSplashPass', function(event){
 	var password = $("#inputSplashPass").val();
-	console.log(password.length);
+	//console.log(password.length);
 	if (password.length >= 6) {
 	    console.log(password.length);
 	    $('#setpinatsplash').prop('disabled', false);

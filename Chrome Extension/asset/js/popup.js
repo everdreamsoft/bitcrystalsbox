@@ -146,6 +146,38 @@ function getStorage() {
     });
 }
 
+function getStorageSetup() {
+    chrome.storage.local.get(["passphrase", "encrypted", "firstopen", "setupdone", "user_id"], function (data) {
+	if (data.firstopen == false) {
+	    if (data.setupdone === true) {
+		$(".bg").css("min-height", "200px");
+		$("#welcomesplash").hide();
+		if (data.encrypted == false) {
+		    existingPassphrase(data.passphrase);
+		} else if (data.encrypted == true) {
+//		    $(".hideEncrypted").hide();
+//		    $("#pinsplash").show();
+//		    $("#priceBox").hide();
+		} else {
+		    newPassphrase();
+		}
+		
+	    } else {
+		//console.log('encryptquestion')
+		welcomesplashShow();
+		$('#initialsplash').hide();
+		$('#encryptquestion').show();
+	    }
+	} else {
+	    chrome.storage.local.set({
+		'setupdone': false
+	    }, function () {
+		welcomesplashShow();
+	    });
+	}
+    });
+}
+
 function welcomesplashShow() {
     $("#welcomesplash").show();
     var randomBackground = Math.floor(Math.random() * 6);
