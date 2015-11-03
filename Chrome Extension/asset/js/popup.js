@@ -831,7 +831,7 @@ function loadAssets(add) {
 		}
 	    });
 	    //  $( "#allassets" ).append("<div style='height: 20px;'></div>");
-	    loadTransactions(add);
+	    //loadTransactions(add);
 	});
     });
 }

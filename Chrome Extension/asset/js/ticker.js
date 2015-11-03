@@ -128,7 +128,7 @@ $(document).ready(function () {
 
 	var addr = $(this).val();
 
-	$(".addressselect").attr("title", addr)
+	$(".addressselect").attr("title", addr);
 
 	if (addr == "add") {
 
@@ -294,14 +294,18 @@ $(document).ready(function () {
 
     $('#assettransactiontoggle').click(function ()
     {
+	var currentaddr = $("#xcpaddress").html();
 	if ($('#assettransactiontoggle').html() == "View Tokens") {
 	    $('#assettransactiontoggle').html("View Token Transaction History");
 	    $('#alltransactions').hide();
 	    $('#allassets').show();
+	     loadAssets(currentaddr);
 	} else {
 	    $('#assettransactiontoggle').html("View Tokens");
 	    $('#alltransactions').show();
 	    $('#allassets').hide();
+	    
+	    loadTransactions(currentaddr);
 	}
     });
 
@@ -316,6 +320,14 @@ $(document).ready(function () {
 	$('#resetwalletblock').toggle();
     });
     $('#resetwalletconfirmation').click(function () {
+	chrome.storage.local.clear();
+	location.reload();
+    });
+    
+    $('#pinresetwallet').click(function () {
+	$('#pinresetwalletblock').toggle();
+    });
+    $('#pinresetwalletconfirmation').click(function () {
 	chrome.storage.local.clear();
 	location.reload();
     });
@@ -476,11 +488,15 @@ $(document).ready(function () {
 
     });
 
-    $(document).on("click", '#newLabelButton', function (event)
-    {
-
-	var currentlabel = $('select option:selected').attr('label');
+    $(document).on("click", '#newLabelButton', function (event){
+	var currentlabel = $('#walletaddresses option:selected').attr('label');
 	$("#newPocketLabel").val(currentlabel); //.slice(0, -18)
+	$("#addresslabeledit").toggle();
+	$("#pocketdropdown").toggle();
+
+    });
+    
+    $(document).on("click", '#saveLabelButtonCancel', function (event) {
 	$("#addresslabeledit").toggle();
 	$("#pocketdropdown").toggle();
 
@@ -748,7 +764,11 @@ $(document).ready(function () {
 
 	//$("#alltransactions").hide();
 
-	loadAssets(address);
+	if ($('#assettransactiontoggle').html() == "View Tokens") {
+	    loadTransactions(address);
+	} else {
+	    loadAssets(address);
+	}
 
 
     });
@@ -871,11 +891,11 @@ $(document).ready(function () {
 
 
     $(document).on("keyup mouseup", '#sendtoamount', function (event) {
-	   console.log("event");
+	   //console.log("event");
 	var sendamount = parseFloat($("#sendtoamount").val());
 	
 	if (!isNaN(sendamount) && sendamount > 0) {
-	    console.log("event 2");
+	    //console.log("event 2");
 	    var currenttoken = $(".currenttoken").html();
 
 	    if (currenttoken == "BTC") {
