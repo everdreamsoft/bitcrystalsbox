@@ -613,11 +613,16 @@ function manualPassphrase(passphrase) {
 	'encrypted': false,
 	'firstopen': false
     }, function () {
-	convertPassphrase(m2);
-	assetDropdown(m2);
-	$(".hideEncrypted").show();
-	$("#manualPassBox").hide();
-	$('#allTabs a:first').tab('show')
+	try {
+	    convertPassphrase(m2);
+	    assetDropdown(m2);
+	    $(".hideEncrypted").show();
+	    $("#manualPassBox").hide();
+	    $('#allTabs a:first').tab('show');
+	} catch (err){
+	    console.log(err);
+	}
+	
     });
 }
 
@@ -1049,12 +1054,12 @@ function sendtokenaction() {
     }
     if (bitcore.Address.isValid(sendtoaddress)) {
 	if (isNaN(sendtoamount) == true || sendtoamount <= 0 || $.isNumeric(sendtoamount) == false) {
-	    $("#sendtokenerror").html("Invalid Amount");
+	    $("#sendtokenerroramount").html("Invalid Amount");
 	    //$("#sendtoamount").val("Invalid Amount");
 	    $("#sendtokenbutton").html("Refresh to continue");
 	} else {
 	    if (totalsend > currentbalance) {
-		$("#sendtokenerror").html("Insufficient Funds");
+		$("#sendtokenerroramount").html("Insufficient Funds");
 		//$("#sendtoamount").val("Insufficient Funds");
 		$("#sendtokenbutton").html("Refresh to continue");
 	    } else {
@@ -1090,18 +1095,18 @@ function sendtokenaction() {
 	    } else {
 		if (data.xcp_pubkey === null) {
 		    console.log("error");
-		    $("#sendtokenerror").html("Invalid account or address");
+		    $("#sendtokenerroraddress").html("Invalid account or address");
 		    //$("#sendtoaddress").val("Invalid Address");
 		    $("#sendtokenbutton").html("Refresh to continue");
 		} else {
 		    if (bitcore.Address.isValid(data.xcp_pubkey)) {
 			if (isNaN(sendtoamount) == true || sendtoamount <= 0 || $.isNumeric(sendtoamount) == false) {
-			    $("#sendtokenerror").html("Invalid Amount");
+			    $("#sendtokenerroramount").html("Invalid Amount");
 			    //$("#sendtoamount").val("Invalid Amount");
 			    $("#sendtokenbutton").html("Refresh to continue");
 			} else {
 			    if (totalsend > currentbalance) {
-				$("#sendtokenerror").html("Insufficient Funds");
+				$("#sendtokenerroramount").html("Insufficient Funds");
 				//$("#sendtoamount").val("Insufficient Funds");
 				$("#sendtokenbutton").html("Refresh to continue");
 			    } else {
@@ -1124,7 +1129,7 @@ function sendtokenaction() {
 			    }
 			}
 		    } else {
-			$("#sendtokenerror").html("Invalid account or address");
+			$("#sendtokenerroraddress").html("Invalid account or address");
 			//$("#sendtoaddress").val("Invalid Address");
 			$("#sendtokenbutton").html("Refresh to continue");
 		    }

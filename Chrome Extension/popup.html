@@ -120,7 +120,9 @@
                 <form id="pinsplashform">
                     <div style="padding: 20px; background-color: rgba(0, 0, 0, 0.7);">
                         <p class="lead" style="color: #fff;">Enter Password:</p>
-                        <div style="width: 100%; padding: 5px 0 25px 0;"><input type="password" style="text-align: center;" class="form-control" id="inputPin" autofocus></div>
+                        <p id="pinsplashformerror" class="lead text-danger"></p>
+                        <div style="width: 100%; padding: 5px 0 25px 0;">
+                            <input type="password" style="text-align: center;" class="form-control" id="inputPin" autofocus></div>
                         <div align="center">
                             <button id="pinButton" type="submit" class="btn btn-primary">Open Wallet</button>
                         </div>
@@ -238,12 +240,12 @@
                             <div id="btcbalance"><div style='font-size: 12px;'>Thinking...</div></div>
                         </div>  
                         <div id="btcsendbox">
-                            <div id="sendtokenerror" class="text-danger"></div>
-                            <div class="inputtitle">Send To:</div>
+                           
+                            <div class="inputtitle">Send To: <span id="sendtokenerroraddress" class="text-danger"></span></div>
                             <div align="center" style="width: 100%; padding: 0 5px 0 5px; margin-bottom: 10px;">
                                 <input type="text" class="form-control" id="sendtoaddress" placeholder="Spell of Genesis username, email or wallet address">
                             </div>
-                            <div class="inputtitle">Amount: <span id="sendUSD" style="font-weight: normal;"></span>
+                            <div class="inputtitle">Amount: <span id="sendUSD" style="font-weight: normal;"></span> <span id="sendtokenerroramount" class="text-danger"></span>
                             </div>
                             <div style="padding: 0 5px 0 5px;">
                                 <div align="center" style="width: 100%; margin-bottom: 15px;">
@@ -510,7 +512,7 @@
                                     <form role="form" id="form_login">
                                         <div id="loginformerror" class="text-danger loginerror"></div>
                                         <div class="form-group text-left">
-                                            
+                                            <label for="email">Login With a Spell Of Genesis Account</label>
                                             <input type="text" class="form-control" id="email" placeholder="Username or email" name="email">
                                         </div>
                                         <div class="form-group text-left">
@@ -518,7 +520,7 @@
                                             <input type="password" class="form-control" id="password" placeholder="Password" name="password">
                                         </div>
                                         <div class="text-right">
-                                        <button type="submit" class="btn btn-success">Login With Spell Of Genesis Account</button> <a target="_blank" href="http://www.spellsofgenesis.com/users/register?lang=en" class="btn btn-info btn-register">Register</a>
+                                        <button type="submit" class="btn btn-success" style="margin-right: 12px;">Login</button> or <a target="_blank" href="http://www.spellsofgenesis.com/users/register?lang=en" class="btn btn-info btn-register">Register on our website</a>
                                         </div>
                                     </form>
                                     <div id="alreadyconnected" style="display : none;">Your wallet is binded with your SOG account.</div>
@@ -537,8 +539,8 @@
                     <div class="tab-pane" id="infoPage">
                         <div style="padding: 10px; text-align: center;">
                             <h2>About</h2>
-                            <p>BitCrystals box is an open source wallet built for the BitCrystals (<a href="www.bitcrystals.com" target="_blank">www.bitcrystals.com</a> used in Moonga and Spels of Genesis</p>
-                            <p>Powered by APIs from <a href="insight.io" target="_blank">Insight.io</a>, <a href="chain.so" target="_blank">Chain.so</a>, and <a href="counterpartychain.io" target="_blank">Counterpartychain.io</a></p>
+                            <p>BitCrystals box is an open source wallet built for the BitCrystals (<a href="http://www.bitcrystals.com" target="_blank">www.bitcrystals.com</a> used in Moonga and Spels of Genesis</p>
+                            <p>Powered by APIs from <a href="https://insight.bitpay.com/" target="_blank">Insight.io</a>, <a href="http://chain.so" target="_blank">Chain.so</a>, and <a href="http://counterpartychain.io" target="_blank">Counterpartychain.io</a></p>
                             <p>Source code is available on Github at<br> <a href="https://github.com/everdreamsoft/bitcrystalbox" target="_blank" style="font-weight: bold; font-size: 12px;"> https://github.com/everdreamsoft/bitcrystalsbox</a></p>
                             Based on the work of LTB network wallet
                             <a href="https://github.com/loon3/LTB-Companion-Wallet" target="_blank">https://github.com/loon3/LTB-Companion-Wallet</a>

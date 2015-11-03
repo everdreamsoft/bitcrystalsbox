@@ -767,3 +767,11 @@ button, .btn {
     line-height: 1.4;
     text-align: center;
 }
+
+.text-danger {
+    color: #FF0500;
+}
+
+.text-danger:hover {
+    color: #FF0500;
+}

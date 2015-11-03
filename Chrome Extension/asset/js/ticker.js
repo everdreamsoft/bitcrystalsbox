@@ -94,22 +94,27 @@ $(document).ready(function () {
 
 	    $("#inputPin").val("");
 
-	    chrome.storage.local.get(["passphrase"], function (data)
-	    {
+	    chrome.storage.local.get(["passphrase"], function (data)  {
 		var decrypted = CryptoJS.AES.decrypt(data.passphrase, pin, {format: JsonFormatter});
-		var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
+		try {
+		    var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
 
-		console.log(decrypted_passphrase.length);
+		    console.log(decrypted_passphrase.length);
 
-		if (decrypted_passphrase.length > 0) {
+		    if (decrypted_passphrase.length > 0) {
+			$('#pinsplashformerror').html("");
+			$("#pinsplash").hide();
+			$(".hideEncrypted").hide();
 
-		    $("#pinsplash").hide();
-		    $(".hideEncrypted").hide();
+			$("#priceBox").show();
 
-		    $("#priceBox").show();
+			existingPassphrase(decrypted.toString(CryptoJS.enc.Utf8));
 
-		    existingPassphrase(decrypted.toString(CryptoJS.enc.Utf8));
-
+		    } else {
+			$('#pinsplashformerror').html("Invalid password");
+		    }
+		} catch (err) {
+		    $('#pinsplashformerror').html("Invalid password");
 		}
 	    });
 	//}
@@ -582,7 +587,8 @@ $(document).ready(function () {
 	$("#sendtoamount").val("");
 	$(".sendlabel").html("");
 	
-	$("#sendtokenerror").html("");
+	$("#sendtokenerroraddress").html("");
+	$("#sendtokenerroramount").html("");
 
 	var assetbalance = $("#xcpbalance").html();
 	var array = assetbalance.split(" ");
@@ -865,7 +871,8 @@ $(document).ready(function () {
     });
 
     $('#sendtokenbutton').click(function () {
-	$('#sendtokenerror').html();
+	$('#sendtokenerroramount').html("");
+	$('#sendtokenerroraddress').html("");
 	sendtokenaction();
     });
 
@@ -909,10 +916,10 @@ $(document).ready(function () {
 
 	    if (sendamount > currentbalance) {
 		$('#sendtokenbutton').prop('disabled', true);
-		$("#sendtokenerror").html("Insufficient Funds");
+		$("#sendtokenerroramount").html("Insufficient Funds");
 	    } else {
 		$("#sendtokenbutton").removeAttr("disabled");
-		$("#sendtokenerror").html("");
+		$("#sendtokenerroramount").html("");
 	    }
 
 
@@ -939,6 +946,7 @@ $(document).ready(function () {
 	    }
 	} else {
 	    $('#sendtokenbutton').prop('disabled', true);
+	    $("#sendtokenerroramount").html("");
 	}
 
     });
