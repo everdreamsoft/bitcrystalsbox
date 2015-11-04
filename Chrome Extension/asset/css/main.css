@@ -775,3 +775,32 @@ button, .btn {
 .text-danger:hover {
     color: #FF0500;
 }
+
+#infoPage {
+    display: none;
+    z-index: 2;
+    background: #fafafa;
+    position: fixed;
+    width: 100%;
+    min-height: 100%;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    padding: 85px 50px 70px 50px;
+    
+    
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    /*opacity: 0.99;
+filter: alpha(opacity=99); */
+}
+
+#infoPageClose {
+    position: absolute;
+    right: 70px;
+}
+#infoPageCloseButton {
+    color: #fff;
+}

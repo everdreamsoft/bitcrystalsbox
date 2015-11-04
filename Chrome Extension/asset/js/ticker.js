@@ -37,16 +37,13 @@ $(document).ready(function () {
     });
 
 
-
     $('#shapeshiftButton').click(function () {
-
 	var selectedaddress = $("#getbtcAddress").val();
-
 	chrome.tabs.create({url: "https://shapeshift.io/shifty.html?destination=" + selectedaddress + "&amp;apiKey=da63a102dd3dbbf683d7123c90ce66dad4b7b9c5636bb5c842b6bf207be84195b2a8199dc933aeb7e83ca3a234551673753b0e9c6e53f529e37abc919d108691&amp;amount="});
-
     });
 
     $("#pinsplash").hide();
+    $("#infoPage").hide();
     $('#alltransactions').hide();
 
     getStorage();
@@ -55,9 +52,21 @@ $(document).ready(function () {
     //on open
     var manifest = chrome.runtime.getManifest();
 
-    var infobutton = "<div style='display: inline-block; padding-left: 5px;'><a id='infoButton' href='#infoPage' data-toggle='tab'><img src='asset/img/info-icon.png' height='16' width='16'></a></div>";
+    var infobutton = "<div style='display: inline-block; padding-left: 5px;'><a id='infoButton' href='#'><img src='asset/img/info-icon.png' height='16' width='16'></a></div>";
 
-    $("#nameversion").html("BitCrystals Box v" + manifest.version + infobutton);
+    $("#infoButton").click(function(){
+	var randomBackground = Math.floor(Math.random() * 6);
+	var bg_link = "url('/asset/img/pin_bg/" + randomBackground + ".jpg') no-repeat 100% center fixed";
+	$("#infoPage").css("background", bg_link);
+	$("#infoPage").css("background-size", "cover");
+	$("#infoPage").show();
+    });
+    
+    $('#infoPageCloseButton').click(function(){
+	$("#infoPage").hide();
+    })
+    
+    $("#nameversionvalue").html("BitCrystals Box v" + manifest.version);
 
 
     var JsonFormatter = {
@@ -206,6 +215,20 @@ $(document).ready(function () {
     $('#encryptyesform').submit(function(e){
 	e.preventDefault();
     });
+    
+    $('#walletyesform').submit(function(e){
+	e.preventDefault();
+	
+	var passphrase = $('#inputSetSplashPassphrase').val();
+	//check if valid assphrase
+	manualPassphrase(passphrase);
+    });
+    
+    $('#walletnoform').submit(function(e){
+	e.preventDefault();
+    });
+    
+    
 
     $('#setupWalletButton').click(function () {
 	$('#walletquestion').show();
@@ -279,14 +302,9 @@ $(document).ready(function () {
     });
 
 
-    $('#setpassphraseatsplash').click(function () {
-	$('#walletyes').hide();
-	$('#encryptquestion').show();
-
-	var passphrase = $('#inputSplashPassphrase').val();
-
-	manualPassphrase(passphrase);
-    });
+//    $('#setpassphraseatsplash').click(function () {
+//	
+//    });
 
     $('#noEncryptButton').click(function () {
 	chrome.storage.local.set({
@@ -990,13 +1008,13 @@ $(document).ready(function () {
 
 	    $('#hideshowpass').html("Show Passphrase");
 
-	    $('#inputSplashPassphrase').prop('type', 'password');
+	    $('#inputSetSplashPassphrase').prop('type', 'password');
 
 	} else {
 
 	    $('#hideshowpass').html("Hide Passphrase");
 
-	    $('#inputSplashPassphrase').prop('type', 'text');
+	    $('#inputSetSplashPassphrase').prop('type', 'text');
 
 	}
 
