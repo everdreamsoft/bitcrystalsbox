@@ -55,5 +55,5 @@
    "name": "BitCrystals Box",
    "permissions": [ "storage", "clipboardWrite", "downloads", "activeTab"  ],
    "short_name": "BitCrystals Box",
-   "version": “1.1”
+   "version": "1.0.1"
 }
