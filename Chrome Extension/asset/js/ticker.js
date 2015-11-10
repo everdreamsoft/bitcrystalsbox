@@ -428,15 +428,43 @@ $(document).ready(function () {
 	resetFive();
     });
 
-    $('#revealPassphrase').click(function ()
-    {
+    $('#revealPassphrase').click(function () {
 	if ($("#newpassphrase").is(":visible")) {
 	    $("#passphrasebox").hide();
 	    $("#revealPassphrase").html("Reveal Passphrase");
 	} else {
-	    $("#passphrasebox").show();
-	    $("#revealPassphrase").html("Hide Passphrase");
+	    chrome.storage.local.get(["encrypted"], function (data) {
+		if (data.encrypted === true) {
+		    $("#passphrasepin").show();
+		} else {
+		    $("#passphrasebox").show();
+		    $("#revealPassphrase").html("Hide Passphrase");
+		}
+	    });  
 	}
+    });
+    
+    $('#passphrasepinform').submit(function (e) {
+	e.preventDefault();
+	var pin = $("#passphrasepinInput").val();
+	$("#passphrasepinInput").val("");
+	chrome.storage.local.get(["passphrase"], function (data)  {
+	    var decrypted = CryptoJS.AES.decrypt(data.passphrase, pin, {format: JsonFormatter});
+	    try {
+		var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
+		console.log(decrypted_passphrase.length);
+		if (decrypted_passphrase.length > 0) {
+		    $('#passphrasepinformerror').html("");
+		    $("#passphrasepin").hide();
+		    $("#passphrasebox").show();
+		    $("#revealPassphrase").html("Hide Passphrase");
+		} else {
+		    $('#passphrasepinformerror').html("Invalid password");
+		}
+	    } catch (err) {
+		$('#passphrasepinformerror').html("Invalid password");
+	    }
+	});
     });
 
     $('#manualPassphrase').click(function ()
@@ -842,7 +870,8 @@ $(document).ready(function () {
     });
 
 
-    $(document).on("click", '#encryptPasswordButton', function (event) {
+    $('#encryptPassphraseBoxform').submit(function(e){
+	e.preventDefault();
 	chrome.storage.local.get(["passphrase"], function (data) {
 	    $('#encryptPassphraseBoxError').html();
 	    var password = $("#encryptPassword").val();
@@ -861,6 +890,7 @@ $(document).ready(function () {
 
 	});
     });
+
 
     $('.signMessageButton').click(function ()
     {
@@ -894,7 +924,13 @@ $(document).ready(function () {
 	$("#preSign").show();
     });
 
-    $('#sendtokenbutton').click(function () {
+//    $('#sendtokenbutton').click(function () {
+//	
+//    });
+    
+    $('#btcsendboxform').submit(function(e){
+	e.preventDefault();
+	
 	$('#sendtokenerroramount').html("");
 	$('#sendtokenerroraddress').html("");
 	sendtokenaction();
@@ -1081,7 +1117,7 @@ $(document).ready(function () {
 
 //loadFeatureRequests();
 
-
+   
     
 
 });

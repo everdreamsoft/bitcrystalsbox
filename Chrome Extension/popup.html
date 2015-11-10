@@ -261,21 +261,23 @@
                             <div id="btcbalance"><div style='font-size: 12px;'>Thinking...</div></div>
                         </div>  
                         <div id="btcsendbox">
-                           
-                            <div class="inputtitle">Send To: <span id="sendtokenerroraddress" class="text-danger"></span></div>
-                            <div align="center" style="width: 100%; padding: 0 5px 0 5px; margin-bottom: 10px;">
-                                <input type="text" class="form-control" id="sendtoaddress" placeholder="Spell of Genesis username, email or wallet address">
-                            </div>
-                            <div class="inputtitle">Amount: <span id="sendUSD" style="font-weight: normal;"></span> <span id="sendtokenerroramount" class="text-danger"></span>
-                            </div>
-                            <div style="padding: 0 5px 0 5px;">
-                                <div align="center" style="width: 100%; margin-bottom: 15px;">
-                                    <input type="number" class="form-control" id="sendtoamount" placeholder="Enter amount">
+                            <form id="btcsendboxform">
+                                <div class="inputtitle">Send To: <span id="sendtokenerroraddress" class="text-danger"></span></div>
+                                <div align="center" style="width: 100%; padding: 0 5px 0 5px; margin-bottom: 10px;">
+                                    <input type="text" class="form-control" id="sendtoaddress" placeholder="Spell of Genesis username, email or wallet address">
                                 </div>
-                                <div align="center">
-                                    <button id="sendtokenbutton" class="btn btn-success btn-block btn-sm" disabled>Send <span class="currenttoken">BITCRYSTALS</span></button>
+                                <div class="inputtitle">Amount: <span id="sendUSD" style="font-weight: normal;"></span> <span id="sendtokenerroramount" class="text-danger"></span>
                                 </div>
-                            </div>
+                                <div style="padding: 0 5px 0 5px;">
+                                    <div align="center" style="width: 100%; margin-bottom: 15px;">
+                                        <input type="number" class="form-control" id="sendtoamount" placeholder="Enter amount">
+                                    </div>
+                                    <div align="center">
+                                        <button id="sendtokenbutton" class="btn btn-success btn-block btn-sm" type="submit" disabled>Send <span class="currenttoken">BITCRYSTALS</span></button>
+                                    </div>
+                                </div>
+                            </form>
+                            
                         </div>
                     </div>
                     <div class="tab-pane" id="inventoryPage">
@@ -472,6 +474,22 @@
                         <div style="margin-top: 15px; padding: 5px;">
                             <div class="lead" align="center">Wallet Settings</div>
                             <a href="#" id="revealPassphrase" class="btn btn-primary btn-block keybutton">Reveal Passphrase</a>
+                            <div id="passphrasepin" style="display: none; margin-bottom: 20px;">
+                                <form id="passphrasepinform">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                        <p class="lead">Enter Pin Password: <span id="passphrasepinformerror" class="lead text-danger"></span></p>
+                                        
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <input type="password" style="text-align: center;" class="form-control" id="passphrasepinInput" autofocus>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <button id="passphrasepinButton" type="submit" class="btn btn-success btn-block">Reveal Passphrase</button>
+                                        </div>                                 
+                                    </div>
+                                </form>
+                            </div>
                             <div id="passphrasebox" style="display: none;">
                                 <div id="newpassphrase">your passphrase</div>
                             </div>
@@ -496,15 +514,17 @@
                            <div class="hideEncrypted">
                                 <a href="#" id="encryptPassphrase" class="btn btn-primary btn-block keybutton">Encrypt Wallet</a>
                                 <div id="encryptPassphraseBox" style="display: none; margin-bottom: 10px;">
-                                    <div class="row" style="padding: 0 10px 0 10px;">
-                                        <div class="text-danger" id="encryptPassphraseBoxError"></div>
-                                        <div class="col-xs-9">
-                                            <div style="width: 100%;"><input type="password" class="form-control" id="encryptPassword" placeholder="Enter new password"></div>
+                                    <form id="encryptPassphraseBoxform">
+                                        <div class="row" style="padding: 0 10px 0 10px;">
+                                            <div class="text-danger" id="encryptPassphraseBoxError"></div>
+                                            <div class="col-xs-9">
+                                                <div style="width: 100%;"><input type="password" class="form-control" id="encryptPassword" placeholder="Enter new password"></div>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <button id="encryptPasswordButton" class="btn btn-success btn-block" style="width: 100%;">Go</button>
+                                            </div>
                                         </div>
-                                        <div class="col-xs-3">
-                                            <button id="encryptPasswordButton" class="btn btn-success btn-block" style="width: 100%;">Go</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
 
