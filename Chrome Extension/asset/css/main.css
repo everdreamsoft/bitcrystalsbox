@@ -744,7 +744,7 @@ button, .btn {
 }
 
 .card_bg {
-    background-color: #000;
+    background-color: #fff;
     color: #fff;
     text-align: center;
     padding: 5px;
@@ -754,9 +754,22 @@ button, .btn {
     width: 100%;  
 }
 
+.card_bg .img_grey {
+  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
+}
+
 .cardtitle {
-    margin-top: 16px;
-    margin-bottom: 16px;
+    background:rgba(0,0,0,0.65);
+    position: absolute;
+    /* margin-top: 16px; */
+    /* margin-bottom: 16px; */
+    padding: 15px;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .gamePageTitle {

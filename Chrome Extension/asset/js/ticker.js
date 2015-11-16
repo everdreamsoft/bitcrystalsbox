@@ -7,6 +7,7 @@ $(document).ready(function () {
     setPinBackground();
     
     $('#inputPin').focus();
+    
 
     $('#alltransactions').hide();
 
@@ -181,6 +182,7 @@ $(document).ready(function () {
 
 	$('#encryptquestion').hide();
 	$('#encryptyes').show();
+	$('#inputSplashPass').focus();
 
     });
 
@@ -238,6 +240,7 @@ $(document).ready(function () {
     $('#yesExistingWallet').click(function () {
 	$('#walletquestion').hide();
 	$('#walletyes').show();
+	$('#inputSetSplashPassphrase').focus();
     });
 
     $('#noExistingWallet').click(function () {
@@ -399,8 +402,8 @@ $(document).ready(function () {
 
     $('#testaction').click(function(){
 	var source_html = "https://spellsofgenesis.com/api/";
-	var method = "?get_wallet_address";
-	var parameter = {login: 'jody.hausmann@gmail.ch'}; 
+	var method = "?get_sog_cards ";
+	var parameter = {}; 
 	console.log('test');
 	$.post(source_html+method, parameter, function (data){
 	    console.log(data);
@@ -831,8 +834,7 @@ $(document).ready(function () {
 
     });
     
-    $('#ganeTab').click(function (){
-	console.log("BLOP");
+    $('#gameTab').click(function (){
 	getUserCards(); 
     });
 

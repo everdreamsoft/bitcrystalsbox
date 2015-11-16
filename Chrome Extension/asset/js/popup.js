@@ -948,13 +948,14 @@ function twodigits(n) {
 
 function timeConverter(UNIX_timestamp) {
     var a = new Date(UNIX_timestamp * 1000);
-    var year = a.getFullYear();
-    var month = a.getMonth() + 1;
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = twodigits(month) + '-' + twodigits(date) + '-' + year + ' | ' + twodigits(hour) + ':' + twodigits(min) + ':' + twodigits(sec);
+//    var year = a.getFullYear();
+//    var month = a.getMonth() + 1;
+//    var date = a.getDate();
+//    var hour = a.getHours();
+//    var min = a.getMinutes();
+//    var sec = a.getSeconds();
+    var time = a.toLocaleDateString() + " | " + a.toLocaleTimeString();
+    //var time = twodigits(date) + '-' + twodigits(month) + '-' + year + ' | ' + twodigits(hour) + ':' + twodigits(min) + ':' + twodigits(sec);
     return time;
 }
 
@@ -1796,13 +1797,19 @@ function showBindWallet(email, pwd, user_id) {
 	$.post(source_html + method, parameter, function (data) {
 	    console.log(data);
 	    if (data.error) {
-		$('#loginformerror').show();
-		$('#loginformerror').html(data.error);
+		//$('#loginformerror').show();
+		$('#bindwalleterror').html(data.error);
 	    } else {
 		if (data.message) {
 		    if (data.message === "success") {
+			$('#bindwalleterror').html('');
+			('#bindwallet').hide();
 			saveuserid(user_id, email);
+		    } else {
+			$('#bindwalleterror').html(data.message);
 		    }
+		} else {
+		    $('#bindwalleterror').html('Unknown error');
 		}
 	    }
 	}, 'json');
@@ -1815,6 +1822,7 @@ function checkifwalletbind(email, user_id, pwd) {
     var method = "?get_wallet_address";
     var parameter = {login: email};
     $.post(source_html + method, parameter, function (data) {
+	console.log(data);
 	if (data.error) {
 	    $('#loginformerror').show();
 	    $('#loginformerror').html(data.error);
@@ -1828,33 +1836,73 @@ function checkifwalletbind(email, user_id, pwd) {
     }, 'json');
 }
 
-
-
-function getUserCards() {
-    chrome.storage.local.get(["user_id", "user_email"], function (data) {
-	//console.log(data);
-	if (data.user_id && data.user_email) {
-	    var source_html = "https://spellsofgenesis.com/api/";
-	    var method = "?get_user_cards";
-	    var parameter = {login: data.user_email};
-	    $.post(source_html + method, parameter, function (data) {
-		//console.log(data);
-		if (data.error) {
+function showAssetsCards(allCards, userCards){
+    var userCardsAvailable = true;
+    var firstCards = "";
+    var remainingCards = "";
+    if (userCards === null) {
+	userCardsAvailable = false;
+    }
+    $("#ownedCards").html("");
+    $("#availableCards").html("");
+    $.each(allCards, function (i, item) {
+	console.log(item);	
+	var owned = false;	
+	if (userCardsAvailable){
+	    $.each(userCards.cards, function (j, itemUser) {		
+		if (itemUser.moonga_id === item.card_id){
+		    console.log(itemUser);
+		    owned = true;
+		    $("#ownedCards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.card_id + "_small.png'><div class='cardtitle'>" + item.name + "</div></div></div></div>");
 		    return false;
-		} else {
-		    $("#allcards").html("");
-		    $.each(data.cards, function (i, item) {
-			//console.log(item);
-			$("#allcards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><div class='cardtitle'>" + item.asset + "</div><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.moonga_id + "_small.png'></div></div></div>");
-		    });
-		    //$("#allcards").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
-		}
-	    }, 'json');
-	} else {
-	    return null;
+		}		
+	    });
 	}
+	if (!owned){
+	    $("#availableCards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><img class='img_grey' src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.card_id + "_small.png'><div class='cardtitle'>" + item.name + "</div></div></div></div>");
+	} 
     });
 }
+
+function getUserCards() {
+    /**
+     * 1. Get all available cards
+     * 2. if connected, get user's cards
+     * 3. Parse first array and check for each if user owns it
+     * 4. Display
+     */
+    
+    var source_html = "https://spellsofgenesis.com/api/";
+    var method = "?get_sog_cards";
+    var parameter = {};
+    //1
+    $.post(source_html + method, parameter, function (data) {
+	//2
+	chrome.storage.local.get(["user_id", "user_email"], function (dataStorage) {
+	    if (dataStorage.user_id && dataStorage.user_email) {
+		var method = "?get_user_cards";
+		var parameter = {login: dataStorage.user_email};
+		$.post(source_html + method, parameter, function (dataUser) {
+		    if (dataUser.error) {
+			showAssetsCards(data, null);
+		    } else {
+			showAssetsCards(data, dataUser);
+//			$("#allcards").html("");
+//			$.each(data.cards, function (i, item) {
+//			    //console.log(item);
+//			    $("#allcards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><div class='cardtitle'>" + item.asset + "</div><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.moonga_id + "_small.png'></div></div></div>");
+//			});
+			//$("#allcards").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
+		    }
+		}, 'json');
+	    } else {
+		showAssetsCards(data, null);
+	    }
+	});
+    }); 
+}
+
+
 
 function checkIfConnected() {
     chrome.storage.local.get(["user_id", "user_email"], function (data) {
