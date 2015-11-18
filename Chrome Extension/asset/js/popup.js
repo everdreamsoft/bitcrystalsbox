@@ -518,12 +518,12 @@ function getRate(assetbalance, pubkey, currenttoken) {
 }
 
 function convertPassphrase(m) {
-	var HDPrivateKey = bitcore.HDPrivateKey.fromSeed(m.toHex(), bitcore.Networks.livenet);
-	var derived = HDPrivateKey.derive("m/0'/0/" + 0);
-	var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
-	var pubkey = address1.toString();
-	return pubkey;
-	
+    var HDPrivateKey = bitcore.HDPrivateKey.fromSeed(m.toHex(), bitcore.Networks.livenet);
+    var derived = HDPrivateKey.derive("m/0'/0/" + 0);
+    var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
+    var pubkey = address1.toString();
+    return pubkey;
+
 }
 
 function assetDropdown(m) {
@@ -642,11 +642,11 @@ function manualPassphrase(passphrase) {
     m2 = new Mnemonic(array);
     $("#newpassphrase").html(string);
     //console.log(m2);
-    
+
     try {
-	
+
 	var pubkey = convertPassphrase(m2);
-	
+
 	chrome.storage.local.set({
 	    'passphrase': string,
 	    'encrypted': false,
@@ -1803,7 +1803,7 @@ function showBindWallet(email, pwd, user_id) {
 		if (data.message) {
 		    if (data.message === "success") {
 			$('#bindwalleterror').html('');
-			('#bindwallet').hide();
+			$('#bindwallet').hide();
 			saveuserid(user_id, email);
 		    } else {
 			$('#bindwalleterror').html(data.message);
@@ -1828,7 +1828,34 @@ function checkifwalletbind(email, user_id, pwd) {
 	    $('#loginformerror').html(data.error);
 	} else {
 	    if (data.xcp_pubkey !== null && (data.xcp_pubkey.length > 5)) {
-		saveuserid(user_id, email);
+		console.log(data.xcp_pubkey);
+		var isSameWallet = false;
+		var string = $("#newpassphrase").html();
+		var array = string.split(" ");
+		m = new Mnemonic(array);
+		var HDPrivateKey = bitcore.HDPrivateKey.fromSeed(m.toHex(), bitcore.Networks.livenet);
+		chrome.storage.local.get(function (dataStorage) {
+		    var totaladdress = dataStorage["totaladdress"];
+
+		    //var addresslabels = data["addressinfo"];
+		    for (var i = 0; i < totaladdress; i++) {
+			var derived = HDPrivateKey.derive("m/0'/0/" + i);
+			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
+			var pubkey = address1.toString();
+			console.log(pubkey);
+			if (pubkey == data.xcp_pubkey) {
+			    isSameWallet = true;
+			    console.log(pubkey + " - " + data.xcp_pubkey);
+			}
+		    }
+		    if (isSameWallet) {
+			saveuserid(user_id, email);
+		    } else {
+			$('#loginformerror').show();
+			$('#loginformerror').html("Your Spells Of Genesis account is already linked to another address from another wallet");
+		    }
+		});
+
 	    } else {
 		showBindWallet(email, pwd, user_id);
 	    }
@@ -1836,32 +1863,185 @@ function checkifwalletbind(email, user_id, pwd) {
     }, 'json');
 }
 
-function showAssetsCards(allCards, userCards){
+function showAssetsCards(allCards, userCards) {
     var userCardsAvailable = true;
     var firstCards = "";
     var remainingCards = "";
-    if (userCards === null) {
+    if (userCards.success === 0) {
 	userCardsAvailable = false;
     }
-    $("#ownedCards").html("");
-    $("#availableCards").html("");
+
+    //$("#availableCards").html("");
     $.each(allCards, function (i, item) {
-	console.log(item);	
-	var owned = false;	
-	if (userCardsAvailable){
-	    $.each(userCards.cards, function (j, itemUser) {		
-		if (itemUser.moonga_id === item.card_id){
-		    console.log(itemUser);
-		    owned = true;
-		    $("#ownedCards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.card_id + "_small.png'><div class='cardtitle'>" + item.name + "</div></div></div></div>");
-		    return false;
-		}		
-	    });
+	//console.log(item);
+	var assetName = item.asset_name;
+	if (assetName != null) {
+	    var owned = false;
+	    if (userCardsAvailable) {
+
+		$.each(userCards.data, function (j, itemUser) {
+		    if (item.asset_name === itemUser.asset) {
+			
+			owned = true;
+
+			//return false;
+		    }
+		});
+	    }
+	    console.log(item);
+	    $("#cardGrid").append(formatCard(item, owned));
+//	    if (!owned) {
+//		$("#cardGrid").append("<div class='grid-item card_holder'><div class='card_asset'><div class='card_bg'><img class='img_grey' src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.card_id + "_small.png'><div class='cardtitle'>" + item.name + "</div></div></div></div>");
+//	    }
 	}
-	if (!owned){
-	    $("#availableCards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><img class='img_grey' src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.card_id + "_small.png'><div class='cardtitle'>" + item.name + "</div></div></div></div>");
-	} 
     });
+
+    var $grid = $('#cardGrid').isotope({
+	itemSelector: '.grid-item',
+	percentPosition: true,
+	transitionDuration: '0.8s',
+	layoutMode: 'fitRows',
+	getSortData: {
+	    name: '.card_name',
+	    power: '.card_power parseInt',
+	    solidity: '.card_solidity parseInt',
+	    element: '.card_element_id',
+	    skill: '.card_skill parseInt'    
+	}
+    });
+
+    
+    var iso = $grid.data('isotope');
+    $grid.isotope('reveal', iso.items);
+    
+    $('.sort-by-button-group').on( 'click', 'button', function() {
+	$('.sort-by-button-group').children().removeClass('active');
+	$( '#cardGrid').children().removeClass('is-expanded');
+//	$.each(buttonList, function(i, item){
+//	    item.button('toggle');
+//	});
+	//console.log(buttonList);
+	var sortByValue = $(this).attr('data-sort-by');
+	$(this).button('toggle');
+	$grid.isotope({ sortBy: sortByValue });
+    });
+    
+    
+    
+    $grid.on( 'click', '.card_asset', function() {
+	var isExpended = false;
+	if ($(this).parent('.grid-item').hasClass('is-expanded')){
+	    isExpended = true;
+	}
+	$( '#cardGrid').children().removeClass('is-expanded');
+	if (!isExpended){
+	    $(this).parent('.grid-item').toggleClass('is-expanded');
+	}
+	$grid.isotope('layout');
+	var item = $(this);
+	$grid.one( 'layoutComplete', function(){
+	    $('html, body').animate({
+            scrollTop: item.offset().top - 50
+        }, 200);  
+	});
+	 
+     });
+
+    //console.log($grid);
+// manually trigger initial layout
+    //$grid.isotope();
+//    $grid.imagesLoaded().progress( function() {
+//	$grid.isotope('layout');
+//    });
+}
+
+function formatCard(card, owned) {
+    var extraClass = "img_grey";
+    if (owned) {
+	extraClass = "";
+    }
+    var cardFormatted = "<div class='grid-item card_holder'>"
+		+ "<div class='card_asset'>"
+		    + "<div class='card_bg'>"	    
+			+ "<div class='cardtitle'>"
+			    + "<p class='card_name'>" + card.name + "</p>"
+			    + "<div class='row datainfo'>"
+				+ "<div class='col-xs-6'>"
+				    + "<p>Power: <span class='card_power'>" + card.power + "</span></p>"
+				    + "<p>Solidity: <span class='card_solidity'>" + card.solidity + "</span></p>"
+				+ "</div>"
+				+ "<div class='col-xs-6'>"
+				    + "<p><span class='card_element_id'>" + getElement(card.element_id) + "</span></p>"
+				    + "<p>Skill: <span class='card_skill'>" + card.skill + "</span></p>"
+				+ "</div>"
+				+ "<div class='col-xs-12 text-center'>"
+				    + "<a target='_blank' href='"+card.purchase_link+"' class='btn "+getButton(card.status)+" btn-sm btn_order'>"+getTitleButton(card.status)+"</a>"
+				+ "</div>"
+			    + "</div>"
+			+ "</div>"
+			+ "<img class='" + extraClass + "' src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + card.card_id + "_small.png'>"
+		    + "</div>"
+		+ "</div>"
+	    + "</div>";
+    return cardFormatted;
+}
+
+function getElement(elementId){
+    if (elementId === 0){ return "None"; }
+    if (elementId === 1){ return "Water"; }
+    if (elementId === 2){ return "Fire"; }
+    if (elementId === 3){ return "Ice"; }
+    if (elementId === 4){ return "Earth"; }
+    if (elementId === 5){ return "Light"; }
+    if (elementId === 6){ return "Dark"; }
+    if (elementId === 7){ return "Ether"; }
+}
+
+function getButton(status){
+    var buttonClass = 'btn-default';
+    var enable = "disabled";
+    if (status === 'out_of_stock') { 
+	buttonClass = 'btn-default';
+	enable = "disabled";
+    }
+    if (status === 'coming_soon') { 
+	buttonClass = 'btn-soon';
+	enable = "disabled";
+    }
+    if (status === 'partner') { 
+	buttonClass = 'btn-partner';
+	enable = "";
+    }
+    if (status === 'premium') { 
+	buttonClass = 'btn-premium';
+	enable = "";
+    }
+    if (status === 'public') { 
+	buttonClass = 'btn-public';
+	enable = "";
+    }
+    return buttonClass + " " + enable;
+}
+
+function getTitleButton(status){
+    var title = '';
+    if (status === 'out_of_stock') { 
+	title = "Out of stock";
+    }
+    if (status === 'coming_soon') { 
+	title = "Coming soon";
+    }
+    if (status === 'partner') { 
+
+	title = "Partner store";
+    }
+    if (status === 'premium') { 
+	title = "Premium store";
+    }
+    if (status === 'public') { 
+	title = "Purchase now";
+    }
+    return title;
 }
 
 function getUserCards() {
@@ -1871,35 +2051,43 @@ function getUserCards() {
      * 3. Parse first array and check for each if user owns it
      * 4. Display
      */
-    
+
     var source_html = "https://spellsofgenesis.com/api/";
     var method = "?get_sog_cards";
     var parameter = {};
     //1
     $.post(source_html + method, parameter, function (data) {
 	//2
-	chrome.storage.local.get(["user_id", "user_email"], function (dataStorage) {
-	    if (dataStorage.user_id && dataStorage.user_email) {
-		var method = "?get_user_cards";
-		var parameter = {login: dataStorage.user_email};
-		$.post(source_html + method, parameter, function (dataUser) {
-		    if (dataUser.error) {
-			showAssetsCards(data, null);
-		    } else {
-			showAssetsCards(data, dataUser);
-//			$("#allcards").html("");
-//			$.each(data.cards, function (i, item) {
-//			    //console.log(item);
-//			    $("#allcards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><div class='cardtitle'>" + item.asset + "</div><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.moonga_id + "_small.png'></div></div></div>");
-//			});
-			//$("#allcards").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
-		    }
-		}, 'json');
-	    } else {
-		showAssetsCards(data, null);
-	    }
+	var address = $("#xcpaddress").html();
+	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
+	$.getJSON(source_html, function (dataAsset) {
+	    //console.log(data);
+	    showAssetsCards(data, dataAsset);
 	});
-    }); 
+
+
+//	chrome.storage.local.get(["user_id", "user_email"], function (dataStorage) {
+//	    if (dataStorage.user_id && dataStorage.user_email) {
+//		var method = "?get_user_cards";
+//		var parameter = {login: dataStorage.user_email};
+//		$.post(source_html + method, parameter, function (dataUser) {
+//		    if (dataUser.error) {
+//			showAssetsCards(data, null);
+//		    } else {
+//			showAssetsCards(data, dataUser);
+////			$("#allcards").html("");
+////			$.each(data.cards, function (i, item) {
+////			    //console.log(item);
+////			    $("#allcards").append("<div class='col-xs-6 card_holder'><div class='card_asset'><div class='card_bg'><div class='cardtitle'>" + item.asset + "</div><img src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.moonga_id + "_small.png'></div></div></div>");
+////			});
+//			//$("#allcards").html("<div class='col-xs-6'><div class='asset'><div class='row btcasset'><div class='col-xs-3' style='margin-left: -10px;'><img src='asset/img/bitcoin_48x48.png'></div><div class='col-xs-9 assetdata'><div class='assetname'>BTC</div><div class='assetqtybox'><div class='assetqty' style='background-color: #EBC481;' id='btcassetbal'></div></div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>");
+//		    }
+//		}, 'json');
+//	    } else {
+//		showAssetsCards(data, null);
+//	    }
+//	});
+    });
 }
 
 

@@ -131,8 +131,8 @@ $(document).ready(function () {
     });
 
     $('#myTab a').click(function (e) {
-	e.preventDefault()
-	$(this).tab('show')
+	e.preventDefault();
+	$(this).tab('show');
     });
 
     $("#walletaddresses").change(function () {
@@ -401,19 +401,39 @@ $(document).ready(function () {
 
 
     $('#testaction').click(function(){
-	var source_html = "https://spellsofgenesis.com/api/";
-	var method = "?get_sog_cards ";
-	var parameter = {}; 
-	console.log('test');
-	$.post(source_html+method, parameter, function (data){
-	    console.log(data);
-	    if (data.error){
-		console.log(data);
-	    } else {
-		console.log(data);
+//	var source_html = "https://spellsofgenesis.com/api/";
+//	var method = "?get_sog_cards ";
+//	var parameter = {}; 
+//	console.log('test');
+//	$.post(source_html+method, parameter, function (data){
+//	    console.log(data);
+//	    if (data.error){
+//		console.log(data);
+//	    } else {
+//		console.log(data);
+//
+//	    }
+//	}, 'json');
 
-	    }
-	}, 'json');
+//	chrome.storage.local.get(function (data) {
+//		    var totaladdress = data["totaladdress"];
+//		    console.log(data);
+//		    //var addresslabels = data["addressinfo"];
+////		    for (var i = 0; i < totaladdress; i++) {
+////			var derived = HDPrivateKey.derive("m/0'/0/" + i);
+////			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
+////			var pubkey = address1.toString();
+////			if (pubkey === data.xcp_pubkey){
+////			    isSameWallet = true;
+////			}
+////		    }
+//		});
+
+	var address = $("#xcpaddress").html();
+	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
+	$.getJSON(source_html, function (data) {
+	    console.log(data);
+	});
     });
 
     $('.addlabbuttons').click(function ()
@@ -835,6 +855,13 @@ $(document).ready(function () {
     });
     
     $('#gameTab').click(function (){
+	$("#cardGrid").html("<div class='grid-sizer'></div>");
+	var grid = Isotope.data('#cardGrid');
+	//var grid = $('#cardGrid').data('isotope');
+	if (grid != null){
+	    console.log(grid);
+	    grid.destroy();
+	}
 	getUserCards(); 
     });
 

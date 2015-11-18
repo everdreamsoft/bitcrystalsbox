@@ -12,6 +12,20 @@ body {
     background-color: #fff;
 }
 
+.nav-tabs {
+    position: fixed;
+    z-index: 2000;
+    background: #fff;
+    padding-top: 5px;
+    top: 0;
+    width: 100%;
+    -webkit-backface-visibility: hidden;
+}
+
+.tab-content {
+    padding-top: 50px;
+}
+
 .tab-pane
 {
     min-height: 200px;
@@ -85,7 +99,7 @@ a {
 
 #pinsplash {
     display: block;
-    z-index: 2;
+    
     background: #fafafa;
     position: fixed;
     width: 100%;
@@ -94,7 +108,7 @@ a {
     left: 0px;
     text-align: center;
     padding: 85px 50px 70px 50px;
-    
+    z-index: 3000;
     
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -105,8 +119,9 @@ filter: alpha(opacity=99); */
 }
 
 #welcomesplash {
+    z-index: 3000;
     display: block;
-    z-index: 2;
+  
     background-color: #21698f; 
     color: #fff;
     position: fixed;
@@ -146,12 +161,12 @@ filter: alpha(opacity=99); */
 
 #priceBox
 {
-    position: absolute;
+    position: fixed;
     right: 17px;
     font-size: 16px;
     top: 0px;
     padding: 7px 5px 0 0;
-
+    z-index: 2001;
     color: #616161;
     text-align: center;
 }
@@ -748,6 +763,8 @@ button, .btn {
     color: #fff;
     text-align: center;
     padding: 5px;
+    -webkit-transition: all 6s ease;
+    transition: all 6s ease;
 }
 
 .card_bg img {
@@ -757,6 +774,17 @@ button, .btn {
 .card_bg .img_grey {
   -webkit-filter: grayscale(1);
   filter: grayscale(1);
+  -webkit-transition: all .6s ease;
+}
+
+.card_bg .img_grey:hover, .is-expanded .img_grey {
+  -webkit-filter: grayscale(0);
+  filter: grayscale(0);
+}
+
+.cardtitle:hover + img, .is-expanded img{
+  -webkit-filter: grayscale(0);
+  filter: grayscale(0);
 }
 
 .cardtitle {
@@ -764,19 +792,47 @@ button, .btn {
     position: absolute;
     /* margin-top: 16px; */
     /* margin-bottom: 16px; */
-    padding: 15px;
+    padding: 5px 12px;
     bottom: 10px;
     left: 0;
     right: 0;
     margin-left: 10px;
     margin-right: 10px;
+    text-align: left;
+    z-index:20;
+
+}
+
+.is-expanded .cardtitle {
+    bottom: 5px;
+    padding-bottom: 22px;
+}
+
+.cardtitle .card_name {
+    text-align: center;  
+    margin-bottom:  10px;
+    font-size: 14px;
+    
+}
+
+.cardtitle .datainfo {
+    display:none;
+}
+
+.card_bg:hover  .datainfo, .is-expanded .datainfo  {
+    display:block;
+}
+
+.cardtitle p {
+    margin: 0;
+    font-size: 12px;
 }
 
 .gamePageTitle {
     margin-top: 15px;
     margin-bottom: 20px;
     font-size: 16px;
-    font-weight: 200;
+    font-weight: 400;
     line-height: 1.4;
     text-align: center;
 }
@@ -800,7 +856,7 @@ button, .btn {
     left: 0px;
     text-align: center;
     padding: 85px 50px 70px 50px;
-    
+    z-index: 3000;
     
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -816,4 +872,55 @@ filter: alpha(opacity=99); */
 }
 #infoPageCloseButton {
     color: #fff;
+}
+
+.lead {
+    font-weight: 400;
+}
+
+#cardGrid {
+    /*margin: 0 auto;*/
+}
+
+.grid-item {
+    cursor: pointer;
+}
+
+.grid-sizer, .grid-item { width: 50%; height: 205px;}
+
+.grid-item.is-expanded,
+.grid-item.is-expanded .card_asset {
+  width: 100%;
+  height: 405px;
+}
+
+.grid-item--width2 { width: 50%; }
+
+.btn-premium {
+    background: #B0986B;
+    color: #fff;
+}
+
+.btn-partner {
+    background: #435E46;
+    color: #fff;
+}
+
+.btn-soon {
+    background: #C45351;
+    color: #fff;
+}
+
+.btn-public {
+    background: #143E70;
+    color: #fff;   
+}
+
+.btn-premium:hover , .btn-partner:hover, .btn-public:hover, .btn-soon:hover {
+    color: #fff; 
+}
+
+.btn_order {
+    margin-top: 6px;
+    margin-bottom: 3px;
 }
