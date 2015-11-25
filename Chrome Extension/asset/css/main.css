@@ -12,7 +12,7 @@ body {
     background-color: #fff;
 }
 
-.nav-tabs {
+header {
     position: fixed;
     z-index: 2000;
     background: #fff;
@@ -22,8 +22,21 @@ body {
     -webkit-backface-visibility: hidden;
 }
 
+#xcpaddressTitle {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.adresszone {
+    padding-left: 10px;
+}
+
+#pocketdropdown {
+    margin-bottom: 10px;
+}
+
 .tab-content {
-    padding-top: 50px;
+    padding-top: 96px;
 }
 
 .tab-pane
@@ -252,10 +265,8 @@ filter: alpha(opacity=99); */
 
 #xcpaddressTitle
 {
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: -12px;
+    font-size: 12px;
+    /*margin-bottom: -12px;*/
 }
 
 #copyButton 
@@ -298,12 +309,10 @@ filter: alpha(opacity=99); */
 
 #addressBox
 {
-    padding: 5px;
+    padding-bottom: 5px;
     font-size: 11px;
-    background-color: #FFF;
-    border-radius: 5px;
-    margin: 10px 0 10px 0;
-    text-align: center;
+    /*margin: 10px 0 10px 0;*/
+    text-align: left;
 
 }
 
@@ -732,11 +741,10 @@ filter: alpha(opacity=99); */
 }
 
 #displaycurrentkey {
-    text-align: center;
+    text-align: left;
     font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 12px;
-    margin-top:12px;
+    font-size: 12px;
+    
 }
 
 

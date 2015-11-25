@@ -542,6 +542,7 @@ function assetDropdown(m) {
 	    $("#bindwalletaddresses").append("<option label='" + addresslabels[i].label + "' title='" + pubkey + "'>" + pubkey + "</option>");
 	    if (i == 0) {
 		$('#displaycurrentkey').html(pubkey);
+		$('#currentaddressname').html(addresslabels[i].label);
 		$(".addressselect").attr("title", pubkey);
 	    }
 
@@ -549,6 +550,7 @@ function assetDropdown(m) {
 	    //$(".addressselect").append("<option label='"+pubkey+"'>"+pubkey+"</option>");
 	}
 	$(".addressselect").append("<option label='--- Add New Address ---'>add</option>");
+	updateAddressDropDown();
     });
 }
 
@@ -573,6 +575,7 @@ function dynamicAddressDropdown(addresslabels, type) {
 	$(".addressselect").append("<option label='" + addresslabels[i].label + "' title='" + pubkey + "'>" + pubkey + "</option>");
     }
     $(".addressselect").append("<option label='--- Add New Address ---'>add</option>");
+    
     if (type == "newaddress") {
 	getBTCBalance(pubkey);
 	$('#displaycurrentkey').html(pubkey);
@@ -586,6 +589,7 @@ function dynamicAddressDropdown(addresslabels, type) {
     }
     var newaddress_select = "#walletaddresses option:eq(" + newaddress_position + ")";
     $(newaddress_select).attr('selected', 'selected');
+    updateAddressDropDown();
 }
 
 
@@ -1495,11 +1499,13 @@ function loadAddresslist() {
 	    var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
 	    var pubkey = address1.toString();
 	    if (i === 0) {
-		$('displaycurrentkey').html(pubkey);
+		$('#displaycurrentkey').html(pubkey);
+		$('#currentaddressname').html(addresslabels[i].label);
 	    }
 	    //$(".addressselect").append("<option label='"+pubkey+"'>"+pubkey+"</option>");
 	    $(".addressselectnoadd").append("<option label='" + addresslabels[i].label + "' title='" + pubkey + "'>" + pubkey + "</option>");
 	}
+	updateAddressDropDown();
     });
 }
 
@@ -1830,6 +1836,7 @@ function checkifwalletbind(email, user_id, pwd) {
 	    if (data.xcp_pubkey !== null && (data.xcp_pubkey.length > 5)) {
 		console.log(data.xcp_pubkey);
 		var isSameWallet = false;
+		var linkedadress;
 		var string = $("#newpassphrase").html();
 		var array = string.split(" ");
 		m = new Mnemonic(array);
@@ -1845,11 +1852,12 @@ function checkifwalletbind(email, user_id, pwd) {
 			console.log(pubkey);
 			if (pubkey == data.xcp_pubkey) {
 			    isSameWallet = true;
+			    linkedadress = pubkey;
 			    console.log(pubkey + " - " + data.xcp_pubkey);
 			}
 		    }
 		    if (isSameWallet) {
-			saveuserid(user_id, email);
+			saveuserid(user_id, email, linkedadress);
 		    } else {
 			$('#loginformerror').show();
 			$('#loginformerror').html("Your Spells Of Genesis account is already linked to another address from another wallet");
@@ -1861,6 +1869,33 @@ function checkifwalletbind(email, user_id, pwd) {
 	    }
 	}
     }, 'json');
+}
+
+function updateAddressDropDown(){
+    var source_html = "https://spellsofgenesis.com/api/";
+    var method = "?get_wallet_address";
+    chrome.storage.local.get(["user_email"], function (data) {
+	
+	if (data.user_email) {
+	    var parameter = {login: data.user_email};
+	    $.post(source_html + method, parameter, function (data) {
+		//loop address list
+		if (data.xcp_pubkey !== null) {
+		    var list = $('#walletaddresses > option');
+		    $.each(list, function(){
+			console.log($(this).val());
+			if ($(this).val() === data.xcp_pubkey){
+			    console.log("yeah " + $(this).attr('label'));
+			    var tempText = $(this).attr('label');
+			    $(this).attr('label', tempText + " - SOG linked address");
+			}
+		    });
+		}
+		
+		
+	    });
+	}
+    });   
 }
 
 function showAssetsCards(allCards, userCards) {
@@ -2103,10 +2138,11 @@ function checkIfConnected() {
     });
 }
 
-function saveuserid(user_id, email) {
+function saveuserid(user_id, email, linkedadress) {
     chrome.storage.local.set({
 	'user_id': user_id,
-	'user_email': email
+	'user_email': email,
+	'linked_address': linkedadress
     }, function () {
 	$("#welcomesplash").hide();
 	$("#priceBox").show();
@@ -2118,6 +2154,36 @@ function hidelogin() {
     $('#sogaccountmessage').hide();
     $('#form_login').hide();
     $('#alreadyconnected').show();
+}
+
+function reloadContent(){
+    //on adress select change, reload
+    var address = $("#xcpaddress").html();
+    //balance load
+    getPrimaryBalance(address);
+    
+    //asset + transaction tab
+    
+    //$("#alltransactions").hide();
+    if ($('#assettransactiontoggle').html() == "View Tokens") {
+	loadTransactions(address);
+    } else {
+	loadAssets(address);
+    } 
+    
+    //reload game cards
+    $("#cardGrid").html("<div class='grid-sizer'></div>");
+    $('.sort-by-button-group').children().removeClass('active');
+    $('#defaultbtn').addClass('active');
+    var grid = Isotope.data('#cardGrid');
+
+    //var grid = $('#cardGrid').data('isotope');
+    if (grid != null){
+	console.log(grid);
+	$('#cardGrid').unbind('click');
+	grid.destroy();
+    }
+    getUserCards(); 
 }
 
 

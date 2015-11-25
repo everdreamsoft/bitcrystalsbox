@@ -176,15 +176,32 @@
                     </div>  
                 </div>
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs" id="allTabs">
-                    <li class="active" id="walletTab"><a id="walletLink" href="#walletPage" data-toggle="tab"><img src="asset/img/wallet_icon.png" height="24" width="24"></a></li>
-                    <li id="inventoryTab"><a href="#inventoryPage" data-toggle="tab"><img src="asset/img/inventory_icon.png" height="24" width="24"></a></li>
-                    <li id="gameTab"><a href="#gamePage" data-toggle="tab"><i class="fa fa-book tabicon"></i></a></li>
-                    <li id="toolsTab"><a href="#toolsPage" data-toggle="tab"><img src="asset/img/apps.png" height="24" width="24"></a></li>
+                <header>
+                    <div class="adresszone">
+                        <div id="addressBox">           
+                            
+                            
+                            
+                            <div id="xcpaddress"></div>
+                        </div> 
+                        <div id="pocketdropdown" class="row">
+                            <div class="col-xs-6">
+                                <select id="walletaddresses" name="walletaddresses" class="addressselect form-control input-sm"></select>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs" id="allTabs">
+                        <li class="active" id="walletTab"><a id="walletLink" href="#walletPage" data-toggle="tab"><img src="asset/img/wallet_icon.png" height="24" width="24"></a></li>
+                        <li id="inventoryTab"><a href="#inventoryPage" data-toggle="tab"><img src="asset/img/inventory_icon.png" height="24" width="24"></a></li>
+                        <li id="gameTab"><a href="#gamePage" data-toggle="tab"><i class="fa fa-book tabicon"></i></a></li>
+                        <li id="toolsTab"><a href="#toolsPage" data-toggle="tab"><img src="asset/img/apps.png" height="24" width="24"></a></li>
 
 
-                    <li><a href="#settingsPage" data-toggle="tab"><img src="asset/img/key-icon.png" height="24" width="24"></a></li>   
-                </ul>
+                        <li><a href="#settingsPage" data-toggle="tab"><img src="asset/img/key-icon.png" height="24" width="24"></a></li>   
+                    </ul>
+                </header>
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div class="tab-pane active" id="walletPage">
@@ -211,26 +228,26 @@
                         <div align="center">
                             <div id="fiatvaluebox" style="margin-top: 6px;">($<div style="display: inline-block;" id="xcpfiatValue"></div>)</div>
                             <!--<div id="switchtoxcp">Switch to BTC</div>-->
+                            
                         </div>
-                        <div id="addressBox">           
-                            <div id="xcpaddressTitle">Your Wallet Address 
-                                <div style="display: inline-block;" id="copyButton">
-                                    <img src="asset/img/clipboard.png">
-                                </div>
-                                <div style="display: inline-block;" id="newLabelButton">
+                        <div id="xcpaddressTitle">
+                            <p>Selected: <span id="currentaddressname"></span>
+                                <span id="newLabelButton">
                                     <img src="asset/img/labeltag.png">
-                                </div>
-                            </div>
-                            <div id="addresscopied">Address Copied to Clipboard!</div>
-                            <div id="xcpaddress"></div>
-                        </div>                          
-                        <div id="pocketdropdown" class="row">
-                            <div class="col-xs-8 col-xs-offset-2">
-                                <select id="walletaddresses" name="walletaddresses" class="addressselect form-control"></select>
-                                <div id="displaycurrentkey"></div>
-                            </div>
-
+                                </span><br>
+                            Public key: <span id="displaycurrentkey"></span>
+                            
+                                <span id="copyButton">
+                                    <img src="asset/img/clipboard.png">
+                                </span><br> <span id="addresscopied">Address Copied to Clipboard!</span>
+                                
+                            </p>
                         </div>
+                       
+                            
+                            
+
+
 
                         <!--
                                     var assetbalance = $("#xcpbalance").html();
@@ -298,7 +315,7 @@
                         <div class="container text-center">
                             <div class="gamePageTitle">Available cards</div>
                             <div class="btn-group sort-by-button-group">
-                                <button type="button" class="btn btn-default active" data-sort-by="original-order">Default</button>
+                                <button id="defaultbtn" type="button" class="btn btn-default active" data-sort-by="original-order">Default</button>
                                 <button type="button" class="btn btn-default" data-sort-by="name">Name</button>
                                 <button type="button" class="btn btn-default" data-sort-by="power">Power</button>
                                 <button type="button" class="btn btn-default" data-sort-by="solidity">Solidity</button>

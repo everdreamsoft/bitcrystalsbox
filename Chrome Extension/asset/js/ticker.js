@@ -136,15 +136,9 @@ $(document).ready(function () {
     });
 
     $("#walletaddresses").change(function () {
-
-
-
 	$("#btcbalance").html("<div style='font-size: 12px;'>Thinking...</div>");
-
 	var addr = $(this).val();
-
 	$(".addressselect").attr("title", addr);
-
 	if (addr == "add") {
 
 //            chrome.storage.local.get(function(data) {
@@ -161,14 +155,15 @@ $(document).ready(function () {
 
 	    console.log(addr);
 	    $("#displaycurrentkey").html(addr);
+	    $('#currentaddressname').html($('#walletaddresses :selected').attr('label'));
 	    //    chrome.storage.local.set(
 	    //                    {
 	    //                        'lastAddress': addr
 	    //                    }, function () {
 
 	    $("#xcpaddress").html(addr);
-
-	    getPrimaryBalance(addr);
+	    reloadContent();
+	    //getPrimaryBalance(addr);
 
 //                    });
 	}
@@ -263,11 +258,11 @@ $(document).ready(function () {
 
 	copyToClipboard(address);
 
-	$('#xcpaddressTitle').hide();
+	//$('#xcpaddressTitle').hide();
 	$('#addresscopied').show();
 	setTimeout(function () {
 	    $('#addresscopied').hide();
-	    $('#xcpaddressTitle').show();
+	    //$('#xcpaddressTitle').show();
 	}, 1500);
 
     });
@@ -415,6 +410,11 @@ $(document).ready(function () {
 //	    }
 //	}, 'json');
 
+	var list = $('#walletaddresses > option');
+	$.each(list, function(){
+	    console.log($(this).val());
+	});
+
 //	chrome.storage.local.get(function (data) {
 //		    var totaladdress = data["totaladdress"];
 //		    console.log(data);
@@ -429,11 +429,11 @@ $(document).ready(function () {
 ////		    }
 //		});
 
-	var address = $("#xcpaddress").html();
-	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
-	$.getJSON(source_html, function (data) {
-	    console.log(data);
-	});
+//	var address = $("#xcpaddress").html();
+//	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
+//	$.getJSON(source_html, function (data) {
+//	    console.log(data);
+//	});
     });
 
     $('.addlabbuttons').click(function ()
@@ -838,28 +838,26 @@ $(document).ready(function () {
 
 
 
-    $('#inventoryTab').click(function ()
-    {
-
+    $('#inventoryTab').click(function () {
 	var address = $("#xcpaddress").html();
-
 	//$("#alltransactions").hide();
-
 	if ($('#assettransactiontoggle').html() == "View Tokens") {
 	    loadTransactions(address);
 	} else {
 	    loadAssets(address);
 	}
-
-
     });
     
     $('#gameTab').click(function (){
 	$("#cardGrid").html("<div class='grid-sizer'></div>");
+	$('.sort-by-button-group').children().removeClass('active');
+	$('#defaultbtn').addClass('active');
 	var grid = Isotope.data('#cardGrid');
+	
 	//var grid = $('#cardGrid').data('isotope');
 	if (grid != null){
 	    console.log(grid);
+	    $('#cardGrid').unbind('click');
 	    grid.destroy();
 	}
 	getUserCards(); 
