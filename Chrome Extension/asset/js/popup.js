@@ -549,7 +549,7 @@ function assetDropdown(m) {
 	    //.slice(0,12)
 	    //$(".addressselect").append("<option label='"+pubkey+"'>"+pubkey+"</option>");
 	}
-	$(".addressselect").append("<option label='--- Add New Address ---'>add</option>");
+	$(".addressselect").append("<option label='--- Add New Address ---' title='add'>add</option>");
 	updateAddressDropDown();
     });
 }
@@ -574,7 +574,7 @@ function dynamicAddressDropdown(addresslabels, type) {
 	//$(".addressselect").append("<option label='"+pubkey+"'>"+pubkey+"</option>");
 	$(".addressselect").append("<option label='" + addresslabels[i].label + "' title='" + pubkey + "'>" + pubkey + "</option>");
     }
-    $(".addressselect").append("<option label='--- Add New Address ---'>add</option>");
+    $(".addressselect").append("<option label='--- Add New Address ---' title='add'>add</option>");
     
     if (type == "newaddress") {
 	getBTCBalance(pubkey);
@@ -608,7 +608,7 @@ function newPassphrase() {
 	'encrypted': false,
 	'firstopen': false,
 	'addressinfo': addressinfo,
-	'totaladdress': 1
+	'totaladdress': 5
     }, function () {
 	//resetFive();
 	$(".hideEncrypted").show();
@@ -1912,19 +1912,19 @@ function showAssetsCards(allCards, userCards) {
 	var assetName = item.asset_name;
 	if (assetName != null) {
 	    var owned = false;
+	    var quantity = 0;
 	    if (userCardsAvailable) {
 
 		$.each(userCards.data, function (j, itemUser) {
-		    if (item.asset_name === itemUser.asset) {
-			
-			owned = true;
-
+		    if (item.asset_name === itemUser.asset) {			
+			owned = true;			
+			quantity = parseFloat(itemUser.amount);
 			//return false;
 		    }
 		});
 	    }
-	    console.log(item);
-	    $("#cardGrid").append(formatCard(item, owned));
+	    //console.log(item);
+	    $("#cardGrid").append(formatCard(item, owned, quantity));
 //	    if (!owned) {
 //		$("#cardGrid").append("<div class='grid-item card_holder'><div class='card_asset'><div class='card_bg'><img class='img_grey' src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + item.card_id + "_small.png'><div class='cardtitle'>" + item.name + "</div></div></div></div>");
 //	    }
@@ -1990,10 +1990,14 @@ function showAssetsCards(allCards, userCards) {
 //    });
 }
 
-function formatCard(card, owned) {
+function formatCard(card, owned, quantityCard) {
     var extraClass = "img_grey";
+    var quantity = "";
     if (owned) {
 	extraClass = "";
+	quantity = "<div class='col-xs-12 text-center'>"
+		    + "<p>Quantity: <span>" + quantityCard.toFixed(2) + "</span></p>"
+	    + "</div>";
     }
     var cardFormatted = "<div class='grid-item card_holder'>"
 		+ "<div class='card_asset'>"
@@ -2009,6 +2013,7 @@ function formatCard(card, owned) {
 				    + "<p><span class='card_element_id'>" + getElement(card.element_id) + "</span></p>"
 				    + "<p>Skill: <span class='card_skill'>" + card.skill + "</span></p>"
 				+ "</div>"
+				+ quantity
 				+ "<div class='col-xs-12 text-center'>"
 				    + "<a target='_blank' href='"+card.purchase_link+"' class='btn "+getButton(card.status)+" btn-sm btn_order'>"+getTitleButton(card.status)+"</a>"
 				+ "</div>"
@@ -2096,7 +2101,7 @@ function getUserCards() {
 	var address = $("#xcpaddress").html();
 	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
 	$.getJSON(source_html, function (dataAsset) {
-	    //console.log(data);
+	    console.log(dataAsset);
 	    showAssetsCards(data, dataAsset);
 	});
 

@@ -410,24 +410,24 @@ $(document).ready(function () {
 //	    }
 //	}, 'json');
 
-	var list = $('#walletaddresses > option');
-	$.each(list, function(){
-	    console.log($(this).val());
-	});
+//	var list = $('#walletaddresses > option');
+//	$.each(list, function(){
+//	    console.log($(this).val());
+//	});
 
-//	chrome.storage.local.get(function (data) {
-//		    var totaladdress = data["totaladdress"];
-//		    console.log(data);
-//		    //var addresslabels = data["addressinfo"];
-////		    for (var i = 0; i < totaladdress; i++) {
-////			var derived = HDPrivateKey.derive("m/0'/0/" + i);
-////			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
-////			var pubkey = address1.toString();
-////			if (pubkey === data.xcp_pubkey){
-////			    isSameWallet = true;
-////			}
-////		    }
-//		});
+	chrome.storage.local.get(function (data) {
+		    var totaladdress = data["totaladdress"];
+		    console.log(data);
+		    //var addresslabels = data["addressinfo"];
+//		    for (var i = 0; i < totaladdress; i++) {
+//			var derived = HDPrivateKey.derive("m/0'/0/" + i);
+//			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
+//			var pubkey = address1.toString();
+//			if (pubkey === data.xcp_pubkey){
+//			    isSameWallet = true;
+//			}
+//		    }
+		});
 
 //	var address = $("#xcpaddress").html();
 //	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
