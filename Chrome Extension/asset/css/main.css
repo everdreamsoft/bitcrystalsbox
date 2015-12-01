@@ -267,6 +267,7 @@ filter: alpha(opacity=99); */
 {
     font-size: 12px;
     /*margin-bottom: -12px;*/
+    padding: 0 20px 0 20px;
 }
 
 #copyButton 
@@ -924,7 +925,12 @@ filter: alpha(opacity=99); */
     color: #fff;   
 }
 
-.btn-premium:hover , .btn-partner:hover, .btn-public:hover, .btn-soon:hover {
+.btn-hold {
+    background: #595755;
+    color: #fff;   
+}
+
+.btn-premium:hover , .btn-partner:hover, .btn-public:hover, .btn-soon:hover, .btn-hold:hover {
     color: #fff; 
 }
 

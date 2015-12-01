@@ -38,9 +38,14 @@ $(document).ready(function () {
     });
 
 
-    $('#shapeshiftButton').click(function () {
+    $('#shapeshiftButtonBTC').click(function () {
 	var selectedaddress = $("#getbtcAddress").val();
 	chrome.tabs.create({url: "https://shapeshift.io/shifty.html?destination=" + selectedaddress + "&amp;apiKey=da63a102dd3dbbf683d7123c90ce66dad4b7b9c5636bb5c842b6bf207be84195b2a8199dc933aeb7e83ca3a234551673753b0e9c6e53f529e37abc919d108691&amp;amount="});
+    });
+    
+    $('#shapeshiftButtonBCY').click(function () {
+	var selectedaddress = $("#getbtcAddress").val();
+	chrome.tabs.create({url: "https://shapeshift.io/shifty.html?destination=" + selectedaddress + "&amp;apiKey=da63a102dd3dbbf683d7123c90ce66dad4b7b9c5636bb5c842b6bf207be84195b2a8199dc933aeb7e83ca3a234551673753b0e9c6e53f529e37abc919d108691&amp;amount=&output=BCY"});
     });
 
     $("#pinsplash").hide();
@@ -415,19 +420,22 @@ $(document).ready(function () {
 //	    console.log($(this).val());
 //	});
 
-	chrome.storage.local.get(function (data) {
-		    var totaladdress = data["totaladdress"];
-		    console.log(data);
-		    //var addresslabels = data["addressinfo"];
-//		    for (var i = 0; i < totaladdress; i++) {
-//			var derived = HDPrivateKey.derive("m/0'/0/" + i);
-//			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
-//			var pubkey = address1.toString();
-//			if (pubkey === data.xcp_pubkey){
-//			    isSameWallet = true;
-//			}
-//		    }
-		});
+var sendtoaddress = $("#sendtoaddress").val();
+    sendtoaddress = sendtoaddress.replace(/^\s+|\s+$/g, "");
+    console.log("TTT"+sendtoaddress+"TTT");
+//	chrome.storage.local.get(function (data) {
+//		    var totaladdress = data["totaladdress"];
+//		    console.log(data);
+//		    //var addresslabels = data["addressinfo"];
+////		    for (var i = 0; i < totaladdress; i++) {
+////			var derived = HDPrivateKey.derive("m/0'/0/" + i);
+////			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
+////			var pubkey = address1.toString();
+////			if (pubkey === data.xcp_pubkey){
+////			    isSameWallet = true;
+////			}
+////		    }
+//		});
 
 //	var address = $("#xcpaddress").html();
 //	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";

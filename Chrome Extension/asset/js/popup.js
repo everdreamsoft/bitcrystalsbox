@@ -397,6 +397,7 @@ function getPrimaryBalanceBTC(pubkey) {
 
 function getPrimaryBalance(pubkey) {
     var addressbox = $("#sendtoaddress").val();
+    
     if (addressbox.length == 0) {
 	$("#btcsendbox").hide();
     }
@@ -528,7 +529,7 @@ function convertPassphrase(m) {
 
 function assetDropdown(m) {
     $(".addressselect").html("");
-    $(".bindwalletaddresses").html("");
+    $("#bindwalletaddresses").html("");
     var HDPrivateKey = bitcore.HDPrivateKey.fromSeed(m.toHex(), bitcore.Networks.livenet);
     chrome.storage.local.get(function (data) {
 	var totaladdress = data["totaladdress"];
@@ -731,15 +732,15 @@ function loadAssets(add) {
 		    }
 		}
 
-		console.log("Total BVAM: " + countnumeric);
+		//console.log("Total BVAM: " + countnumeric);
 		checkBvam(addressbvam, countnumeric, function (matchingdata, missing) {
-		    console.log(matchingdata);
-		    console.log("missing: " + missing);
+		    
+		    //console.log("missing: " + missing);
 		    var allbvamdata = new Array();
 		    $.each(data.data, function (i, item) {
 			var assetname = data.data[i].asset;
 			var assetbalance = data.data[i].amount; //.balance for blockscan
-
+			//console.log(assetbalance);
 			var assetdescription = data.data[i].description;
 			if (assetbalance.indexOf(".") == -1) {
 			    var divisible = "no";
@@ -1165,6 +1166,7 @@ function loadBvam(callback) {
 
 function isAdressValid() {
     var sendtoaddress = $("#sendtoaddress").val();
+    sendtoaddress = sendtoaddress.replace(/^\s+|\s+$/g, "");
     if (bitcore.Address.isValid(sendtoaddress)) {
 	return true;
     } else {
@@ -1188,6 +1190,7 @@ function sendtokenaction() {
     var pubkey = $("#xcpaddress").html();
     var currenttoken = $(".currenttoken").html();
     var sendtoaddress = $("#sendtoaddress").val();
+    sendtoaddress = sendtoaddress.replace(/^\s+|\s+$/g, "");
     var sendtoamount_text = $("#sendtoamount").val();
     var sendtoamount = parseFloat(sendtoamount_text);
     if ($("#isdivisible").html() == "no") {
@@ -1239,7 +1242,7 @@ function sendtokenaction() {
 
 	var source_html = "https://spellsofgenesis.com/api/";
 	var method = "?get_wallet_address";
-	var parameter = {login: $("#sendtoaddress").val()};
+	var parameter = {login: sendtoaddress};
 	//console.log('test');
 	$.post(source_html + method, parameter, function (data) {
 	    console.log(data);
@@ -1976,7 +1979,7 @@ function showAssetsCards(allCards, userCards) {
 	var item = $(this);
 	$grid.one( 'layoutComplete', function(){
 	    $('html, body').animate({
-            scrollTop: item.offset().top - 50
+            scrollTop: item.offset().top - 90
         }, 200);  
 	});
 	 
@@ -1996,7 +1999,7 @@ function formatCard(card, owned, quantityCard) {
     if (owned) {
 	extraClass = "";
 	quantity = "<div class='col-xs-12 text-center'>"
-		    + "<p>Quantity: <span>" + quantityCard.toFixed(2) + "</span></p>"
+		    + "<p>Quantity: <span>" + quantityCard + "</span></p>"
 	    + "</div>";
     }
     var cardFormatted = "<div class='grid-item card_holder'>"
@@ -2038,6 +2041,7 @@ function getElement(elementId){
 }
 
 function getButton(status){
+    //console.log(status);
     var buttonClass = 'btn-default';
     var enable = "disabled";
     if (status === 'out_of_stock') { 
@@ -2060,6 +2064,10 @@ function getButton(status){
 	buttonClass = 'btn-public';
 	enable = "";
     }
+    if (status === 'on_hold') { 
+	buttonClass = 'btn-hold';
+	enable = "";
+    }
     return buttonClass + " " + enable;
 }
 
@@ -2080,6 +2088,9 @@ function getTitleButton(status){
     }
     if (status === 'public') { 
 	title = "Purchase now";
+    }
+    if (status === 'on_hold') { 
+	title = "On hold";
     }
     return title;
 }
@@ -2152,6 +2163,7 @@ function saveuserid(user_id, email, linkedadress) {
 	$("#welcomesplash").hide();
 	$("#priceBox").show();
 	hidelogin();
+	updateAddressDropDown();
     });
 }
 
