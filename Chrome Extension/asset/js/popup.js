@@ -397,7 +397,7 @@ function getPrimaryBalanceBTC(pubkey) {
 
 function getPrimaryBalance(pubkey) {
     var addressbox = $("#sendtoaddress").val();
-    
+
     if (addressbox.length == 0) {
 	$("#btcsendbox").hide();
     }
@@ -576,7 +576,7 @@ function dynamicAddressDropdown(addresslabels, type) {
 	$(".addressselect").append("<option label='" + addresslabels[i].label + "' title='" + pubkey + "'>" + pubkey + "</option>");
     }
     $(".addressselect").append("<option label='--- Add New Address ---' title='add'>add</option>");
-    
+
     if (type == "newaddress") {
 	getBTCBalance(pubkey);
 	$('#displaycurrentkey').html(pubkey);
@@ -734,7 +734,7 @@ function loadAssets(add) {
 
 		//console.log("Total BVAM: " + countnumeric);
 		checkBvam(addressbvam, countnumeric, function (matchingdata, missing) {
-		    
+
 		    //console.log("missing: " + missing);
 		    var allbvamdata = new Array();
 		    $.each(data.data, function (i, item) {
@@ -1501,16 +1501,50 @@ function loadAddresslist() {
 	    var derived = HDPrivateKey.derive("m/0'/0/" + i);
 	    var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
 	    var pubkey = address1.toString();
-	    if (i === 0) {
-		$('#displaycurrentkey').html(pubkey);
-		$('#currentaddressname').html(addresslabels[i].label);
-	    }
+//	    if (i === 0) {
+//		$('#displaycurrentkey').html(pubkey);
+//		$('#currentaddressname').html(addresslabels[i].label);
+//	    }
 	    //$(".addressselect").append("<option label='"+pubkey+"'>"+pubkey+"</option>");
 	    $(".addressselectnoadd").append("<option label='" + addresslabels[i].label + "' title='" + pubkey + "'>" + pubkey + "</option>");
 	}
-	updateAddressDropDown();
+	//updateAddressDropDown();
     });
 }
+
+//function loadAddresslistForLabelUpdate() {
+//    var string = $("#newpassphrase").html();
+//    var array = string.split(" ");
+//    m = new Mnemonic(array);
+//    var currentsize = $('#walletaddresses option').size();
+//    currentsize = currentsize - 1;
+//    var addressindex = $("#walletaddresses option:selected").index();
+//    var val = $('#walletaddresses :selected').val();
+//
+//    $(".addressselectnoadd").html("");
+//    var HDPrivateKey = bitcore.HDPrivateKey.fromSeed(m.toHex(), bitcore.Networks.livenet);
+//    chrome.storage.local.get(function (data) {
+//	var addresslabels = data.addressinfo;
+//	
+//	for (var i = 0; i < currentsize; i++) {
+//	    var derived = HDPrivateKey.derive("m/0'/0/" + i);
+//	    var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
+//	    var pubkey = address1.toString();
+//	    if (pubkey === val) {
+//		
+//		return;
+//	    }
+//	    //newPocketLabel
+////	    if (i === 0) {
+////		$('#displaycurrentkey').html(pubkey);
+////		$('#currentaddressname').html(addresslabels[i].label);
+////	    }
+//	    //$(".addressselect").append("<option label='"+pubkey+"'>"+pubkey+"</option>");
+//	    $(".addressselectnoadd").append("<option label='" + addresslabels[i].label + "' title='" + pubkey + "'>"+ pubkey + "</option>");
+//	}
+//	//updateAddressDropDown();
+//    });
+//}
 
 
 //function loadSwapbots() {
@@ -1874,31 +1908,31 @@ function checkifwalletbind(email, user_id, pwd) {
     }, 'json');
 }
 
-function updateAddressDropDown(){
+function updateAddressDropDown() {
     var source_html = "https://spellsofgenesis.com/api/";
     var method = "?get_wallet_address";
     chrome.storage.local.get(["user_email"], function (data) {
-	
+
 	if (data.user_email) {
 	    var parameter = {login: data.user_email};
 	    $.post(source_html + method, parameter, function (data) {
 		//loop address list
 		if (data.xcp_pubkey !== null) {
 		    var list = $('#walletaddresses > option');
-		    $.each(list, function(){
+		    $.each(list, function () {
 			console.log($(this).val());
-			if ($(this).val() === data.xcp_pubkey){
+			if ($(this).val() === data.xcp_pubkey) {
 			    console.log("yeah " + $(this).attr('label'));
 			    var tempText = $(this).attr('label');
 			    $(this).attr('label', tempText + " - SOG linked address");
 			}
 		    });
 		}
-		
-		
+
+
 	    });
 	}
-    });   
+    });
 }
 
 function showAssetsCards(allCards, userCards) {
@@ -1919,8 +1953,8 @@ function showAssetsCards(allCards, userCards) {
 	    if (userCardsAvailable) {
 
 		$.each(userCards.data, function (j, itemUser) {
-		    if (item.asset_name === itemUser.asset) {			
-			owned = true;			
+		    if (item.asset_name === itemUser.asset) {
+			owned = true;
 			quantity = parseFloat(itemUser.amount);
 			//return false;
 		    }
@@ -1944,47 +1978,57 @@ function showAssetsCards(allCards, userCards) {
 	    power: '.card_power parseInt',
 	    solidity: '.card_solidity parseInt',
 	    element: '.card_element_id',
-	    skill: '.card_skill parseInt'    
+	    skill: '.card_skill parseInt'
 	}
     });
 
-    
+
     var iso = $grid.data('isotope');
     $grid.isotope('reveal', iso.items);
-    
-    $('.sort-by-button-group').on( 'click', 'button', function() {
+
+    $('.sort-by-button-group').on('click', 'button', function () {
 	$('.sort-by-button-group').children().removeClass('active');
-	$( '#cardGrid').children().removeClass('is-expanded');
+	$('#cardGrid').children().removeClass('is-expanded');
 //	$.each(buttonList, function(i, item){
 //	    item.button('toggle');
 //	});
 	//console.log(buttonList);
 	var sortByValue = $(this).attr('data-sort-by');
 	$(this).button('toggle');
-	$grid.isotope({ sortBy: sortByValue });
+	$grid.isotope({sortBy: sortByValue});
     });
-    
-    
-    
-    $grid.on( 'click', '.card_asset', function() {
+
+
+
+    $grid.on('click', '.card_asset', function () {
 	var isExpended = false;
-	if ($(this).parent('.grid-item').hasClass('is-expanded')){
+	if ($(this).parent('.grid-item').hasClass('is-expanded')) {
 	    isExpended = true;
 	}
-	$( '#cardGrid').children().removeClass('is-expanded');
-	if (!isExpended){
+	$('#cardGrid').children().removeClass('is-expanded');
+	if (!isExpended) {
 	    $(this).parent('.grid-item').toggleClass('is-expanded');
-	}
+	    $(this).find('.datainfo').show();
+	} 
 	$grid.isotope('layout');
 	var item = $(this);
-	$grid.one( 'layoutComplete', function(){
+	$grid.one('layoutComplete', function () {
 	    $('html, body').animate({
-            scrollTop: item.offset().top - 90
-        }, 200);  
+		scrollTop: item.offset().top - 90
+	    }, 200);
 	});
-	 
-     });
 
+    });
+
+    $('.card_bg').hover(function () {
+	if (!$(this).parent().parent('.grid-item').hasClass('is-expanded')) {
+	    $(this).find('.datainfo').slideToggle("fast");
+	}
+    }, function () {
+	if (!$(this).parent().parent('.grid-item').hasClass('is-expanded')) {
+	    $(this).find('.datainfo').slideToggle("fast");
+	}
+    });
     //console.log($grid);
 // manually trigger initial layout
     //$grid.isotope();
@@ -1999,97 +2043,113 @@ function formatCard(card, owned, quantityCard) {
     if (owned) {
 	extraClass = "";
 	quantity = "<div class='col-xs-12 text-center'>"
-		    + "<p>Quantity: <span>" + quantityCard + "</span></p>"
-	    + "</div>";
+		+ "<p>Quantity: <span>" + quantityCard + "</span></p>"
+		+ "</div>";
     }
     var cardFormatted = "<div class='grid-item card_holder'>"
-		+ "<div class='card_asset'>"
-		    + "<div class='card_bg'>"	    
-			+ "<div class='cardtitle'>"
-			    + "<p class='card_name'>" + card.name + "</p>"
-			    + "<div class='row datainfo'>"
-				+ "<div class='col-xs-6'>"
-				    + "<p>Power: <span class='card_power'>" + card.power + "</span></p>"
-				    + "<p>Solidity: <span class='card_solidity'>" + card.solidity + "</span></p>"
-				+ "</div>"
-				+ "<div class='col-xs-6'>"
-				    + "<p><span class='card_element_id'>" + getElement(card.element_id) + "</span></p>"
-				    + "<p>Skill: <span class='card_skill'>" + card.skill + "</span></p>"
-				+ "</div>"
-				+ quantity
-				+ "<div class='col-xs-12 text-center'>"
-				    + "<a target='_blank' href='"+card.purchase_link+"' class='btn "+getButton(card.status)+" btn-sm btn_order'>"+getTitleButton(card.status)+"</a>"
-				+ "</div>"
-			    + "</div>"
-			+ "</div>"
-			+ "<img class='" + extraClass + "' src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + card.card_id + "_small.png'>"
-		    + "</div>"
-		+ "</div>"
+	    + "<div class='card_asset'>"
+	    + "<div class='card_bg'>"
+	    + "<div class='cardtitle'>"
+	    + "<p class='card_name'>" + card.name + "</p>"
+	    + "<div class='row datainfo'>"
+	    + "<div class='col-xs-6'>"
+	    + "<p>Power: <span class='card_power'>" + card.power + "</span></p>"
+	    + "<p>Solidity: <span class='card_solidity'>" + card.solidity + "</span></p>"
+	    + "</div>"
+	    + "<div class='col-xs-6'>"
+	    + "<p><span class='card_element_id'>" + getElement(card.element_id) + "</span></p>"
+	    + "<p>Skill: <span class='card_skill'>" + card.skill + "</span></p>"
+	    + "</div>"
+	    + quantity
+	    + "<div class='col-xs-12 text-center'>"
+	    + "<a target='_blank' href='" + card.purchase_link + "' class='btn " + getButton(card.status) + " btn-sm btn_order'>" + getTitleButton(card.status) + "</a>"
+	    + "</div>"
+	    + "</div>"
+	    + "</div>"
+	    + "<img class='" + extraClass + "' src='http://api.moonga.com/gw_admin/img/cards/generated/card_" + card.card_id + "_small.png'>"
+	    + "</div>"
+	    + "</div>"
 	    + "</div>";
     return cardFormatted;
 }
 
-function getElement(elementId){
-    if (elementId === 0){ return "None"; }
-    if (elementId === 1){ return "Water"; }
-    if (elementId === 2){ return "Fire"; }
-    if (elementId === 3){ return "Ice"; }
-    if (elementId === 4){ return "Earth"; }
-    if (elementId === 5){ return "Light"; }
-    if (elementId === 6){ return "Dark"; }
-    if (elementId === 7){ return "Ether"; }
+function getElement(elementId) {
+    if (elementId === 0) {
+	return "None";
+    }
+    if (elementId === 1) {
+	return "Water";
+    }
+    if (elementId === 2) {
+	return "Fire";
+    }
+    if (elementId === 3) {
+	return "Ice";
+    }
+    if (elementId === 4) {
+	return "Earth";
+    }
+    if (elementId === 5) {
+	return "Light";
+    }
+    if (elementId === 6) {
+	return "Dark";
+    }
+    if (elementId === 7) {
+	return "Ether";
+    }
 }
 
-function getButton(status){
+function getButton(status) {
     //console.log(status);
     var buttonClass = 'btn-default';
     var enable = "disabled";
-    if (status === 'out_of_stock') { 
+    if (status === 'out_of_stock') {
 	buttonClass = 'btn-default';
 	enable = "disabled";
     }
-    if (status === 'coming_soon') { 
+    if (status === 'coming_soon') {
 	buttonClass = 'btn-soon';
 	enable = "disabled";
     }
-    if (status === 'partner') { 
+    if (status === 'partner') {
 	buttonClass = 'btn-partner';
 	enable = "";
     }
-    if (status === 'premium') { 
+    if (status === 'premium') {
 	buttonClass = 'btn-premium';
 	enable = "";
     }
-    if (status === 'public') { 
+    if (status === 'public') {
 	buttonClass = 'btn-public';
 	enable = "";
     }
-    if (status === 'on_hold') { 
+    if (status === 'on_hold') {
 	buttonClass = 'btn-hold';
 	enable = "";
     }
     return buttonClass + " " + enable;
 }
 
-function getTitleButton(status){
+function getTitleButton(status) {
     var title = '';
-    if (status === 'out_of_stock') { 
+    if (status === 'out_of_stock') {
 	title = "Out of stock";
     }
-    if (status === 'coming_soon') { 
+    if (status === 'coming_soon') {
 	title = "Coming soon";
     }
-    if (status === 'partner') { 
+    if (status === 'partner') {
 
 	title = "Partner store";
     }
-    if (status === 'premium') { 
+    if (status === 'premium') {
 	title = "Premium store";
     }
-    if (status === 'public') { 
+    if (status === 'public') {
 	title = "Purchase now";
     }
-    if (status === 'on_hold') { 
+    if (status === 'on_hold') {
 	title = "On hold";
     }
     return title;
@@ -2162,6 +2222,7 @@ function saveuserid(user_id, email, linkedadress) {
     }, function () {
 	$("#welcomesplash").hide();
 	$("#priceBox").show();
+	$('#alreadyconnected').html("Your Spells Of Genesis account has been linked to the previously selected address of this wallet.");
 	hidelogin();
 	updateAddressDropDown();
     });
@@ -2173,21 +2234,21 @@ function hidelogin() {
     $('#alreadyconnected').show();
 }
 
-function reloadContent(){
+function reloadContent() {
     //on adress select change, reload
     var address = $("#xcpaddress").html();
     //balance load
     getPrimaryBalance(address);
-    
+
     //asset + transaction tab
-    
+
     //$("#alltransactions").hide();
     if ($('#assettransactiontoggle').html() == "View Tokens") {
 	loadTransactions(address);
     } else {
 	loadAssets(address);
-    } 
-    
+    }
+
     //reload game cards
     $("#cardGrid").html("<div class='grid-sizer'></div>");
     $('.sort-by-button-group').children().removeClass('active');
@@ -2195,12 +2256,12 @@ function reloadContent(){
     var grid = Isotope.data('#cardGrid');
 
     //var grid = $('#cardGrid').data('isotope');
-    if (grid != null){
+    if (grid != null) {
 	console.log(grid);
 	$('#cardGrid').unbind('click');
 	grid.destroy();
     }
-    getUserCards(); 
+    getUserCards();
 }
 
 

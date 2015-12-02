@@ -5,9 +5,11 @@ $(document).ready(function () {
     setInitialAddressCount();
 
     setPinBackground();
-    
+
     $('#inputPin').focus();
-    
+
+
+
 
     $('#alltransactions').hide();
 
@@ -42,7 +44,7 @@ $(document).ready(function () {
 	var selectedaddress = $("#getbtcAddress").val();
 	chrome.tabs.create({url: "https://shapeshift.io/shifty.html?destination=" + selectedaddress + "&amp;apiKey=da63a102dd3dbbf683d7123c90ce66dad4b7b9c5636bb5c842b6bf207be84195b2a8199dc933aeb7e83ca3a234551673753b0e9c6e53f529e37abc919d108691&amp;amount="});
     });
-    
+
     $('#shapeshiftButtonBCY').click(function () {
 	var selectedaddress = $("#getbtcAddress").val();
 	chrome.tabs.create({url: "https://shapeshift.io/shifty.html?destination=" + selectedaddress + "&amp;apiKey=da63a102dd3dbbf683d7123c90ce66dad4b7b9c5636bb5c842b6bf207be84195b2a8199dc933aeb7e83ca3a234551673753b0e9c6e53f529e37abc919d108691&amp;amount=&output=BCY"});
@@ -60,18 +62,18 @@ $(document).ready(function () {
 
     var infobutton = "<div style='display: inline-block; padding-left: 5px;'><a id='infoButton' href='#'><img src='asset/img/info-icon.png' height='16' width='16'></a></div>";
 
-    $("#infoButton").click(function(){
+    $("#infoButton").click(function () {
 	var randomBackground = Math.floor(Math.random() * 6);
 	var bg_link = "url('/asset/img/pin_bg/" + randomBackground + ".jpg') no-repeat 100% center fixed";
 	$("#infoPage").css("background", bg_link);
 	$("#infoPage").css("background-size", "cover");
 	$("#infoPage").show();
     });
-    
-    $('#infoPageCloseButton').click(function(){
+
+    $('#infoPageCloseButton').click(function () {
 	$("#infoPage").hide();
     })
-    
+
     $("#nameversionvalue").html("BitCrystals Box v" + manifest.version);
 
 
@@ -100,38 +102,38 @@ $(document).ready(function () {
     $("#pinsplashform").submit(function (e) {
 	//console.log(e.target.id);
 	//if (e.target.id != "form_login") {
-	    e.preventDefault();
-	    //};
+	e.preventDefault();
+	//};
 
-	    // $("#pinButton").click(function () {
+	// $("#pinButton").click(function () {
 
-	    var pin = $("#inputPin").val();
+	var pin = $("#inputPin").val();
 
-	    $("#inputPin").val("");
+	$("#inputPin").val("");
 
-	    chrome.storage.local.get(["passphrase"], function (data)  {
-		var decrypted = CryptoJS.AES.decrypt(data.passphrase, pin, {format: JsonFormatter});
-		try {
-		    var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
+	chrome.storage.local.get(["passphrase"], function (data) {
+	    var decrypted = CryptoJS.AES.decrypt(data.passphrase, pin, {format: JsonFormatter});
+	    try {
+		var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
 
-		    console.log(decrypted_passphrase.length);
+		console.log(decrypted_passphrase.length);
 
-		    if (decrypted_passphrase.length > 0) {
-			$('#pinsplashformerror').html("");
-			$("#pinsplash").hide();
-			$(".hideEncrypted").hide();
+		if (decrypted_passphrase.length > 0) {
+		    $('#pinsplashformerror').html("");
+		    $("#pinsplash").hide();
+		    $(".hideEncrypted").hide();
 
-			$("#priceBox").show();
+		    $("#priceBox").show();
 
-			existingPassphrase(decrypted.toString(CryptoJS.enc.Utf8));
+		    existingPassphrase(decrypted.toString(CryptoJS.enc.Utf8));
 
-		    } else {
-			$('#pinsplashformerror').html("Invalid password");
-		    }
-		} catch (err) {
+		} else {
 		    $('#pinsplashformerror').html("Invalid password");
 		}
-	    });
+	    } catch (err) {
+		$('#pinsplashformerror').html("Invalid password");
+	    }
+	});
 	//}
     });
 
@@ -193,11 +195,11 @@ $(document).ready(function () {
 	    chrome.storage.local.get(["passphrase"], function (data) {
 		var encrypted = CryptoJS.AES.encrypt(data.passphrase, password, {format: JsonFormatter});
 		chrome.storage.local.set({
-			    'passphrase': encrypted,
-			    'encrypted': true,
-			    'setupdone': true
-			}, function () {
-			//getStorageSetup();
+		    'passphrase': encrypted,
+		    'encrypted': true,
+		    'setupdone': true
+		}, function () {
+		    //getStorageSetup();
 		    $("#welcomesplash").hide();
 		    //$("#tutorial_splash").show();
 		    $(".hideEncrypted").hide();
@@ -206,7 +208,7 @@ $(document).ready(function () {
 		});
 	    });
 	} else {
-	    if (isNaN(password)){
+	    if (isNaN(password)) {
 		$('#passwordentererror').html('The password cannot be empty');
 	    } else {
 		$('#passwordentererror').html('The password is too short');
@@ -214,23 +216,23 @@ $(document).ready(function () {
 	}
     });
 
-    $('#encryptyesform').submit(function(e){
+    $('#encryptyesform').submit(function (e) {
 	e.preventDefault();
     });
-    
-    $('#walletyesform').submit(function(e){
+
+    $('#walletyesform').submit(function (e) {
 	e.preventDefault();
-	
+
 	var passphrase = $('#inputSetSplashPassphrase').val();
 	//check if valid assphrase
 	manualPassphrase(passphrase);
     });
-    
-    $('#walletnoform').submit(function(e){
+
+    $('#walletnoform').submit(function (e) {
 	e.preventDefault();
     });
-    
-    
+
+
 
     $('#setupWalletButton').click(function () {
 	$('#walletquestion').show();
@@ -321,8 +323,8 @@ $(document).ready(function () {
 
 	});
     });
-    
-    
+
+
 
     $('#assettransactiontoggle').click(function ()
     {
@@ -331,12 +333,12 @@ $(document).ready(function () {
 	    $('#assettransactiontoggle').html("View Token Transaction History");
 	    $('#alltransactions').hide();
 	    $('#allassets').show();
-	     loadAssets(currentaddr);
+	    loadAssets(currentaddr);
 	} else {
 	    $('#assettransactiontoggle').html("View Tokens");
 	    $('#alltransactions').show();
 	    $('#allassets').hide();
-	    
+
 	    loadTransactions(currentaddr);
 	}
     });
@@ -355,7 +357,7 @@ $(document).ready(function () {
 	chrome.storage.local.clear();
 	location.reload();
     });
-    
+
     $('#pinresetwallet').click(function () {
 	$('#pinresetwalletblock').toggle();
     });
@@ -373,20 +375,20 @@ $(document).ready(function () {
 	$('#loginformerror').hide();
 	var email = $('#email').val();
 	var pwd = $('#password').val();
-	if (email && pwd){
+	if (email && pwd) {
 	    //next step, check if valid
 	    console.log("yeah");
 	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?get_user_id";
-	    var parameter = {login: email, password: pwd}; 
-	    $.post(source_html+method, parameter, function (data){
+	    var parameter = {login: email, password: pwd};
+	    $.post(source_html + method, parameter, function (data) {
 		console.log(data);
-		if (data.error){
-		    
+		if (data.error) {
+
 		    $('#loginformerror').show();
 		    $('#loginformerror').html("The email or the password is not correct");
 		} else {
-		    if (data.user_id){
+		    if (data.user_id) {
 			//go to next page
 			//showBindWallet(email, pwd, data.user_id);
 			checkifwalletbind(email, data.user_id, pwd);
@@ -400,7 +402,7 @@ $(document).ready(function () {
     });
 
 
-    $('#testaction').click(function(){
+    $('#testaction').click(function () {
 //	var source_html = "https://spellsofgenesis.com/api/";
 //	var method = "?get_sog_cards ";
 //	var parameter = {}; 
@@ -420,22 +422,24 @@ $(document).ready(function () {
 //	    console.log($(this).val());
 //	});
 
-var sendtoaddress = $("#sendtoaddress").val();
-    sendtoaddress = sendtoaddress.replace(/^\s+|\s+$/g, "");
-    console.log("TTT"+sendtoaddress+"TTT");
-//	chrome.storage.local.get(function (data) {
-//		    var totaladdress = data["totaladdress"];
-//		    console.log(data);
-//		    //var addresslabels = data["addressinfo"];
-////		    for (var i = 0; i < totaladdress; i++) {
-////			var derived = HDPrivateKey.derive("m/0'/0/" + i);
-////			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
-////			var pubkey = address1.toString();
-////			if (pubkey === data.xcp_pubkey){
-////			    isSameWallet = true;
-////			}
-////		    }
-//		});
+//var val = $('#walletaddresses :selected').val();
+//console.log(val);
+//	var sendtoaddress = $("#sendtoaddress").val();
+//	sendtoaddress = sendtoaddress.replace(/^\s+|\s+$/g, "");
+//	console.log("TTT" + sendtoaddress + "TTT");
+	chrome.storage.local.get(function (data) {
+	    var totaladdress = data["totaladdress"];
+	    console.log(data);
+	    //var addresslabels = data["addressinfo"];
+//		    for (var i = 0; i < totaladdress; i++) {
+//			var derived = HDPrivateKey.derive("m/0'/0/" + i);
+//			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
+//			var pubkey = address1.toString();
+//			if (pubkey === data.xcp_pubkey){
+//			    isSameWallet = true;
+//			}
+//		    }
+	});
 
 //	var address = $("#xcpaddress").html();
 //	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
@@ -471,15 +475,15 @@ var sendtoaddress = $("#sendtoaddress").val();
 		    $("#passphrasebox").show();
 		    $("#revealPassphrase").html("Hide Passphrase");
 		}
-	    });  
+	    });
 	}
     });
-    
+
     $('#passphrasepinform').submit(function (e) {
 	e.preventDefault();
 	var pin = $("#passphrasepinInput").val();
 	$("#passphrasepinInput").val("");
-	chrome.storage.local.get(["passphrase"], function (data)  {
+	chrome.storage.local.get(["passphrase"], function (data) {
 	    var decrypted = CryptoJS.AES.decrypt(data.passphrase, pin, {format: JsonFormatter});
 	    try {
 		var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
@@ -576,14 +580,16 @@ var sendtoaddress = $("#sendtoaddress").val();
 
     });
 
-    $(document).on("click", '#newLabelButton', function (event){
-	var currentlabel = $('#walletaddresses option:selected').attr('label');
-	$("#newPocketLabel").val(currentlabel); //.slice(0, -18)
-	$("#addresslabeledit").toggle();
-	$("#pocketdropdown").toggle();
-
+    $(document).on("click", '#newLabelButton', function (event) {
+	var addressindex = $("#walletaddresses option:selected").index();
+	chrome.storage.local.get(["addressinfo"], function (data) {
+	    var currentlabel = data.addressinfo[addressindex];
+	    $("#newPocketLabel").val(currentlabel.label); //.slice(0, -18)
+	    $("#addresslabeledit").toggle();
+	    $("#pocketdropdown").toggle();
+	});
     });
-    
+
     $(document).on("click", '#saveLabelButtonCancel', function (event) {
 	$("#addresslabeledit").toggle();
 	$("#pocketdropdown").toggle();
@@ -669,7 +675,7 @@ var sendtoaddress = $("#sendtoaddress").val();
 	$("#sendtoaddress").val("");
 	$("#sendtoamount").val("");
 	$(".sendlabel").html("");
-	
+
 	$("#sendtokenerroraddress").html("");
 	$("#sendtokenerroramount").html("");
 
@@ -728,7 +734,7 @@ var sendtoaddress = $("#sendtoaddress").val();
 	var temp = $(this).parent().parent();
 	var assetdata = temp.prev();
 	var $assetdiv;
-	if (assetdata.hasClass('assetdata')){
+	if (assetdata.hasClass('assetdata')) {
 	    $assetdiv = assetdata.find('.assetname');
 	} else {
 	    $assetdiv = $(this).prev();
@@ -855,20 +861,20 @@ var sendtoaddress = $("#sendtoaddress").val();
 	    loadAssets(address);
 	}
     });
-    
-    $('#gameTab').click(function (){
+
+    $('#gameTab').click(function () {
 	$("#cardGrid").html("<div class='grid-sizer'></div>");
 	$('.sort-by-button-group').children().removeClass('active');
 	$('#defaultbtn').addClass('active');
 	var grid = Isotope.data('#cardGrid');
-	
+
 	//var grid = $('#cardGrid').data('isotope');
-	if (grid != null){
+	if (grid != null) {
 	    console.log(grid);
 	    $('#cardGrid').unbind('click');
 	    grid.destroy();
 	}
-	getUserCards(); 
+	getUserCards();
     });
 
     $("#ltbUserSearch").keyup(function (event) {
@@ -905,7 +911,7 @@ var sendtoaddress = $("#sendtoaddress").val();
     });
 
 
-    $('#encryptPassphraseBoxform').submit(function(e){
+    $('#encryptPassphraseBoxform').submit(function (e) {
 	e.preventDefault();
 	chrome.storage.local.get(["passphrase"], function (data) {
 	    $('#encryptPassphraseBoxError').html();
@@ -914,9 +920,9 @@ var sendtoaddress = $("#sendtoaddress").val();
 	    if (password.length >= 6) {
 		var encrypted = CryptoJS.AES.encrypt(data.passphrase, password, {format: JsonFormatter});
 		chrome.storage.local.set({
-			    'passphrase': encrypted,
-			    'encrypted': true
-			}, function () {
+		    'passphrase': encrypted,
+		    'encrypted': true
+		}, function () {
 		    $(".hideEncrypted").hide();
 		});
 	    } else {
@@ -962,10 +968,10 @@ var sendtoaddress = $("#sendtoaddress").val();
 //    $('#sendtokenbutton').click(function () {
 //	
 //    });
-    
-    $('#btcsendboxform').submit(function(e){
+
+    $('#btcsendboxform').submit(function (e) {
 	e.preventDefault();
-	
+
 	$('#sendtokenerroramount').html("");
 	$('#sendtokenerroraddress').html("");
 	sendtokenaction();
@@ -979,8 +985,8 @@ var sendtoaddress = $("#sendtoaddress").val();
 	//}
 	$(".sendlabel").html("");
     });
-    
-    $(document).on("keyup", '#inputSplashPass', function(event){
+
+    $(document).on("keyup", '#inputSplashPass', function (event) {
 	var password = $("#inputSplashPass").val();
 	//console.log(password.length);
 	if (password.length >= 6) {
@@ -993,9 +999,9 @@ var sendtoaddress = $("#sendtoaddress").val();
 
 
     $(document).on("keyup mouseup", '#sendtoamount', function (event) {
-	   //console.log("event");
+	//console.log("event");
 	var sendamount = parseFloat($("#sendtoamount").val());
-	
+
 	if (!isNaN(sendamount) && sendamount > 0) {
 	    //console.log("event 2");
 	    var currenttoken = $(".currenttoken").html();
@@ -1152,7 +1158,7 @@ var sendtoaddress = $("#sendtoaddress").val();
 
 //loadFeatureRequests();
 
-   
-    
+
+
 
 });

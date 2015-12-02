@@ -828,7 +828,11 @@ button, .btn {
     display:none;
 }
 
-.card_bg:hover  .datainfo, .is-expanded .datainfo  {
+/*.card_bg:hover  .datainfo, .is-expanded .datainfo  {
+    display:block;
+}*/
+
+.is-expanded .datainfo  {
     display:block;
 }
 
