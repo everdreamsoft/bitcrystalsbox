@@ -116,7 +116,7 @@ $(document).ready(function () {
 	    try {
 		var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
 
-		console.log(decrypted_passphrase.length);
+//		console.log(decrypted_passphrase.length);
 
 		if (decrypted_passphrase.length > 0) {
 		    $('#pinsplashformerror').html("");
@@ -160,7 +160,7 @@ $(document).ready(function () {
 
 	} else {
 
-	    console.log(addr);
+//	    console.log(addr);
 	    $("#displaycurrentkey").html(addr);
 	    $('#currentaddressname').html($('#walletaddresses :selected').attr('label'));
 	    //    chrome.storage.local.set(
@@ -377,12 +377,12 @@ $(document).ready(function () {
 	var pwd = $('#password').val();
 	if (email && pwd) {
 	    //next step, check if valid
-	    console.log("yeah");
+//	    console.log("yeah");
 	    var source_html = "https://spellsofgenesis.com/api/";
 	    var method = "?get_user_id";
 	    var parameter = {login: email, password: pwd};
 	    $.post(source_html + method, parameter, function (data) {
-		console.log(data);
+//		console.log(data);
 		if (data.error) {
 
 		    $('#loginformerror').show();
@@ -429,7 +429,7 @@ $(document).ready(function () {
 //	console.log("TTT" + sendtoaddress + "TTT");
 	chrome.storage.local.get(function (data) {
 	    var totaladdress = data["totaladdress"];
-	    console.log(data);
+//	    console.log(data);
 	    //var addresslabels = data["addressinfo"];
 //		    for (var i = 0; i < totaladdress; i++) {
 //			var derived = HDPrivateKey.derive("m/0'/0/" + i);
@@ -487,7 +487,7 @@ $(document).ready(function () {
 	    var decrypted = CryptoJS.AES.decrypt(data.passphrase, pin, {format: JsonFormatter});
 	    try {
 		var decrypted_passphrase = decrypted.toString(CryptoJS.enc.Utf8);
-		console.log(decrypted_passphrase.length);
+//		console.log(decrypted_passphrase.length);
 		if (decrypted_passphrase.length > 0) {
 		    $('#passphrasepinformerror').html("");
 		    $("#passphrasepin").hide();
@@ -620,7 +620,7 @@ $(document).ready(function () {
 
     $(document).on("click", '.swapbotselect', function (event)
     {
-	console.log($(this).data("url"));
+//	console.log($(this).data("url"));
 
 
 	chrome.tabs.create({url: $(this).data("url")});
@@ -870,7 +870,7 @@ $(document).ready(function () {
 
 	//var grid = $('#cardGrid').data('isotope');
 	if (grid != null) {
-	    console.log(grid);
+//	    console.log(grid);
 	    $('#cardGrid').unbind('click');
 	    grid.destroy();
 	}
@@ -990,7 +990,7 @@ $(document).ready(function () {
 	var password = $("#inputSplashPass").val();
 	//console.log(password.length);
 	if (password.length >= 6) {
-	    console.log(password.length);
+//	    console.log(password.length);
 	    $('#setpinatsplash').prop('disabled', false);
 	} else {
 	    $('#setpinatsplash').prop('disabled', true);

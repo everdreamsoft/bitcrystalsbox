@@ -657,7 +657,7 @@ function manualPassphrase(passphrase) {
 	    'encrypted': false,
 	    'firstopen': false
 	}, function () {
-	    console.log(pubkey);
+//	    console.log(pubkey);
 	    $("#xcpaddressTitle").show();
 	    $("#xcpaddress").html(pubkey);
 	    getPrimaryBalance(pubkey);
@@ -669,7 +669,7 @@ function manualPassphrase(passphrase) {
 	    $('#allTabs a:first').tab('show');
 	});
     } catch (err) {
-	console.log(err);
+//	console.log(err);
 	$('#walletyesererror').html("The Passphrase is not valid.");
     }
 
@@ -790,14 +790,14 @@ function loadAssets(add) {
 			if (matchingdata[i]["data"] != "") {
 			    //local bvam
 			    var isvaliddata = validateEnhancedAssetJSON(matchingdata[i]["data"]);
-			    console.log("Calculated Local JSON Hash: " + isvaliddata);
-			    console.log("Stored Local JSON Hash: " + hash);
+//			    console.log("Calculated Local JSON Hash: " + isvaliddata);
+//			    console.log("Stored Local JSON Hash: " + hash);
 			    if (isvaliddata != hash) {
 				var jsondata = new Array();
 				var jsondata = {ownername: matchingdata[i]["data"]["ownername"], ownertwitter: matchingdata[i]["data"]["ownertwitter"], owneraddress: matchingdata[i]["data"]["owneraddress"], asset: matchingdata[i]["data"]["asset"], assetname: matchingdata[i]["data"]["assetname"], assetdescription: matchingdata[i]["data"]["assetdescription"], assetwebsite: matchingdata[i]["data"]["assetwebsite"]};
 				var isvaliddata = validateEnhancedAssetJSON(jsondata);
-				console.log("Re-ordered Calculated Local JSON Hash: " + isvaliddata);
-				console.log("Stored Local JSON Hash: " + hash);
+//				console.log("Re-ordered Calculated Local JSON Hash: " + isvaliddata);
+//				console.log("Stored Local JSON Hash: " + hash);
 			    }
 			    if (isvaliddata == hash && matchingdata[i]["data"]["asset"] == assetname) {
 				var enhancedname = matchingdata[i]["data"]["assetname"];
@@ -808,14 +808,14 @@ function loadAssets(add) {
 			    //get bvam
 			    $.getJSON("http://xcp.ninja/hash/" + hash + ".json", function (data) {
 				var isvaliddata = validateEnhancedAssetJSON(data);
-				console.log("Calculated Remote JSON Hash: " + isvaliddata);
+//				console.log("Calculated Remote JSON Hash: " + isvaliddata);
 				console.log("Stored Remote JSON Hash: " + hash);
 				if (isvaliddata == hash && data.asset == assetname) {
 				    var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row enhancedasset'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div style='width: 200px;' class='assetname-enhanced' data-numeric='" + assetname + "'>" + data.assetname + "</div><div class='movetowallet'>Send</div><div style='margin: 5px 0 8px 9px; width: 200px; font-size: 11px; font-style: italic;'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty' style='background-color: #6B8A62;'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div></div></div></div>";
 				    allbvamdata = allbvamdata.concat({hash: hash, data: data});
 				    if (missing == 1) {
 					addBvam(allbvamdata);
-					console.log(allbvamdata);
+//					console.log(allbvamdata);
 				    } else {
 					missing--;
 				    }
@@ -824,7 +824,7 @@ function loadAssets(add) {
 			    }).fail(function () {
 				if (missing == 1) {
 				    addBvam(allbvamdata);
-				    console.log(allbvamdata);
+//				    console.log(allbvamdata);
 				} else {
 				    missing--;
 				}
@@ -861,9 +861,9 @@ function loadAssets(add) {
 			    if ($(assetnameclass).html() != '') {
 				var currentunconf = $(assetnameclass).html();
 				var result = currentunconf.substring(1, currentunconf.length - 1);
-				console.log(result);
+//				console.log(result);
 				var combinetxs = parseFloat(result) + parseFloat(assetqty);
-				console.log(combinetxs);
+//				console.log(combinetxs);
 				if (combinetxs > 0) {
 				    var unconftxs = "+" + combinetxs;
 				} else {
@@ -995,7 +995,7 @@ function loadTransactions(add, btctxs) {
 	    $.getJSON(source_html, function (data) {
 		var alltxs = new Array();
 		var xcptxs = new Array();
-		console.log(data);
+//		console.log(data);
 		if (data.success != 0) {
 		    $.each(data.data, function (i, item) {
 			var assetname = data.data[i].asset;
@@ -1009,7 +1009,7 @@ function loadTransactions(add, btctxs) {
 		} else {
 		    var alltxs = btctxs;
 		}
-		console.log(alltxs);
+//		console.log(alltxs);
 		alltxs.sort(function (a, b) {
 		    return b.time_utc - a.time_utc;
 		});
@@ -1087,8 +1087,8 @@ function loadBvam(callback) {
 	} else {
 	    var allbvam = "";
 	}
-	console.log(hashname);
-	console.log(hashhash);
+//	console.log(hashname);
+//	console.log(hashhash);
 	callback(allbvam, hashname, hashhash);
     });
 }
@@ -1172,7 +1172,7 @@ function isAdressValid() {
     } else {
 	var userid = $("#sendtoaddress").val().toLowerCase();
 	$.getJSON("http://api.moonga.com/RCT/cp/members/playerWallets/" + userid, function (data) {
-	    console.log(data);
+//	    console.log(data);
 	});
 	return false;
     }
@@ -1196,7 +1196,7 @@ function sendtokenaction() {
     if ($("#isdivisible").html() == "no") {
 	sendtoamount = Math.floor(sendtoamount) / 100000000;
     }
-    console.log(sendtoamount);
+//    console.log(sendtoamount);
     var minersfee = 0.0001;
     if (currenttoken == "BTC") {
 	var totalsend = sendtoamount + minersfee;
@@ -1245,12 +1245,12 @@ function sendtokenaction() {
 	var parameter = {login: sendtoaddress};
 	//console.log('test');
 	$.post(source_html + method, parameter, function (data) {
-	    console.log(data);
+//	    console.log(data);
 	    if (data.error) {
-		console.log(data);
+//		console.log(data);
 	    } else {
 		if (data.xcp_pubkey === null) {
-		    console.log("error");
+//		    console.log("error");
 		    $("#sendtokenerroraddress").html("Invalid account or address");
 		    //$("#sendtoaddress").val("Invalid Address");
 		    $("#sendtokenbutton").html("Refresh to continue");
@@ -1601,7 +1601,7 @@ function loadFeatureRequests() {
 			    //if (fundedpct < 1) {
 			    fundedpct = fundedpct.toFixed(1);
 			    //}
-			    console.log(fundedpct);
+//			    console.log(fundedpct);
 			    $(issueclass).html(addCommas(pcbalance));
 			    $(issuepctclass).html(fundedpct + "%");
 			    allfeatures.push({title: title, body: body, url: url, pocketchange: pcbalance});
@@ -1609,7 +1609,7 @@ function loadFeatureRequests() {
 		    }
 		}
 	    });
-	    console.log(allfeatures);
+//	    console.log(allfeatures);
 	    $("#FundDevBody").append("<div style='height: 20px; line-height: 20px; margin: 10px 0 50px 0;'>Have an idea for a new feature?<br><a href='https://github.com/loon3/Tokenly-Pockets/issues/new' style='font-weight: bold;'>Create an issue on Github!</a></div>");
 //                   return allfeatures;
 	}
@@ -1671,7 +1671,7 @@ function loadSwaplist(currenttoken) {
 
 function validateEnhancedAssetJSON(jsondata) {
     var jsonstring = JSON.stringify(jsondata);
-    console.log(jsonstring);
+//    console.log(jsonstring);
     var firstSHA = Crypto.SHA256(jsonstring)
     var hash160 = Crypto.RIPEMD160(Crypto.util.hexToBytes(firstSHA))
     var version = 0x41 // "T"
@@ -1705,7 +1705,7 @@ function exportAddresses() {
 	    var currentlabel = addresslabels[i].label;
 	    addresslabels[i].address = pubkey;
 	}
-	console.log(firstkey);
+//	console.log(firstkey);
 	// Convert object to a string.
 	var result = JSON.stringify(addresslabels);
 	// Save as file
@@ -1811,7 +1811,7 @@ function checkBvam(assetlist, countnumeric, callback) {
 	} else {
 	    var allbvam = data["bvam"];
 	}
-	console.log(allbvam);
+//	console.log(allbvam);
 	var storedbvam = new Array();
 	for (var i = 0; i < assetlist.length; i++) {
 	    for (var j = 0; j < allbvam.length; j++) {
@@ -1838,7 +1838,7 @@ function showBindWallet(email, pwd, user_id) {
 	var method = "?bind_wallet_address";
 	var parameter = {login: email, password: pwd, xcp_pubkey: $('#bindwalletaddresses').val()};
 	$.post(source_html + method, parameter, function (data) {
-	    console.log(data);
+//	    console.log(data);
 	    if (data.error) {
 		//$('#loginformerror').show();
 		$('#bindwalleterror').html(data.error);
@@ -1865,13 +1865,13 @@ function checkifwalletbind(email, user_id, pwd) {
     var method = "?get_wallet_address";
     var parameter = {login: email};
     $.post(source_html + method, parameter, function (data) {
-	console.log(data);
+//	console.log(data);
 	if (data.error) {
 	    $('#loginformerror').show();
 	    $('#loginformerror').html(data.error);
 	} else {
 	    if (data.xcp_pubkey !== null && (data.xcp_pubkey.length > 5)) {
-		console.log(data.xcp_pubkey);
+//		console.log(data.xcp_pubkey);
 		var isSameWallet = false;
 		var linkedadress;
 		var string = $("#newpassphrase").html();
@@ -1886,11 +1886,11 @@ function checkifwalletbind(email, user_id, pwd) {
 			var derived = HDPrivateKey.derive("m/0'/0/" + i);
 			var address1 = new bitcore.Address(derived.publicKey, bitcore.Networks.livenet);
 			var pubkey = address1.toString();
-			console.log(pubkey);
+//			console.log(pubkey);
 			if (pubkey == data.xcp_pubkey) {
 			    isSameWallet = true;
 			    linkedadress = pubkey;
-			    console.log(pubkey + " - " + data.xcp_pubkey);
+//			    console.log(pubkey + " - " + data.xcp_pubkey);
 			}
 		    }
 		    if (isSameWallet) {
@@ -1920,9 +1920,9 @@ function updateAddressDropDown() {
 		if (data.xcp_pubkey !== null) {
 		    var list = $('#walletaddresses > option');
 		    $.each(list, function () {
-			console.log($(this).val());
+//			console.log($(this).val());
 			if ($(this).val() === data.xcp_pubkey) {
-			    console.log("yeah " + $(this).attr('label'));
+//			    console.log("yeah " + $(this).attr('label'));
 			    var tempText = $(this).attr('label');
 			    $(this).attr('label', tempText + " - SOG linked address");
 			}
@@ -2172,7 +2172,7 @@ function getUserCards() {
 	var address = $("#xcpaddress").html();
 	var source_html = "https://counterpartychain.io/api/balances/" + address + "?description=1";
 	$.getJSON(source_html, function (dataAsset) {
-	    console.log(dataAsset);
+//	    console.log(dataAsset);
 	    showAssetsCards(data, dataAsset);
 	});
 
@@ -2257,7 +2257,7 @@ function reloadContent() {
 
     //var grid = $('#cardGrid').data('isotope');
     if (grid != null) {
-	console.log(grid);
+//	console.log(grid);
 	$('#cardGrid').unbind('click');
 	grid.destroy();
     }
