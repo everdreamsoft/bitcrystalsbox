@@ -416,14 +416,16 @@ function getRate(assetbalance, pubkey, currenttoken) {
     //if ($("#ltbPriceFlipped").html() == "...") {
     //$.getJSON( "https://api.bitcoinaverage.com/ticker/USD/", function( data ) {
     //$.getJSON("http://btc.blockr.io/api/v1/exchangerate/current", function (data) {
-    var link = "http://coinmarketcap-nexuist.rhcloud.com/api/bcy/price";
+    //var link = "http://coinmarketcap-nexuist.rhcloud.com/api/bcy/price";
+    var link = "http://coinmarketcap.northpole.ro/api/v5/BCY.json";
     if (currenttoken == "BTC") {
-	link = "http://coinmarketcap-nexuist.rhcloud.com/api/btc/price";
+	//link = "http://coinmarketcap-nexuist.rhcloud.com/api/btc/price";
+	link = "http://coinmarketcap.northpole.ro/api/v5/BTC.json";
     }
     //console.log(currenttoken);
     $.getJSON(link, function (data) {
 	//var btcprice = 1 / parseFloat(data.last);
-	var btcprice = parseFloat(data.usd);
+	var btcprice = parseFloat(data.price.usd);
 	$("#ltbPrice").html(Number(btcprice.toFixed(5).toLocaleString('en')));
 	//var btcpriceflipped = data.last;
 	var btcpriceflipped = btcprice;
@@ -737,6 +739,7 @@ function loadAssets(add) {
 
 		    //console.log("missing: " + missing);
 		    var allbvamdata = new Array();
+		    var gotBCY = false;
 		    $.each(data.data, function (i, item) {
 			var assetname = data.data[i].asset;
 			var assetbalance = data.data[i].amount; //.balance for blockscan
@@ -754,6 +757,7 @@ function loadAssets(add) {
 			    var classname = 'singleasset';
 			    if (assetname == "BITCRYSTALS") {
 				classname = 'bcyasset';
+				gotBCY = true;
 			    }
 			    var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row " + classname + "'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div class='assetname'>" + assetname + "</div><div class='assetqtybox'><div class='assetqty amountbg'>" + assetbalance + "</div> <div class='" + assetname + "-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>" + divisible + "</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
 
@@ -761,6 +765,13 @@ function loadAssets(add) {
 			    $("#allassets").append(assethtml);
 			}
 		    });
+		    if (gotBCY === false){					
+			var classname = 'bcyasset';
+			var iconname = "BITCRYSTALS";
+			var iconlink = "http://counterpartychain.io/content/images/icons/" + iconname.toLowerCase() + ".png";
+			var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row " + classname + "'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div class='assetname'>BITCRYSTALS</div><div class='assetqtybox'><div class='assetqty amountbg'>0</div> <div class='BITCRYSTALS-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>no</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
+			$("#allassets").append(assethtml);		    
+		    }
 		    $.each(matchingdata, function (i, item) {
 //
 //
@@ -839,8 +850,6 @@ function loadAssets(add) {
 		var iconname = "BITCRYSTALS";
 		var iconlink = "http://counterpartychain.io/content/images/icons/" + iconname.toLowerCase() + ".png";
 		var assethtml = "<div class='col-xs-6'><div class='asset'><div class='row " + classname + "'><div class='col-xs-3' style='margin-left: -10px;'><div style='padding: 5px 0 0 2px;'><img src='" + iconlink + "'></div></div><div class='col-xs-9 assetdata'><div class='archiveasset'>Archive</div><div class='assetname'>BITCRYSTALS</div><div class='assetqtybox'><div class='assetqty amountbg'>0</div> <div class='BITCRYSTALS-pending assetqty-unconfirmed'></div></div><div id='assetdivisible' style='display: none;'>no</div></div><div class='hovereffect'><div class='inner'><div class='movetowallet'>Send</div></div></div></div></div></div>";
-
-		//3082B0
 		$("#allassets").append(assethtml);
 	    }
 	    var xcp_mempool_html = "https://counterpartychain.io/api/mempool";
