@@ -1030,8 +1030,10 @@ $(document).ready(function () {
 		    return $(this).val();
 		}).length > 0) {
 
-		    var ltbtousd = $("#ltbPrice").data("btc").price;
-		    var sendinusd = sendamount / parseFloat(ltbtousd);
+		    //var ltbtousd = $("#ltbPrice").data("btc").price;
+		    var ltbtousd = $("#ltbPrice").html();
+		    //console.log(ltbtousd);
+		    var sendinusd = sendamount * parseFloat(ltbtousd);
 
 		    $("#sendUSD").html("($" + sendinusd.toFixed(2) + ")");
 

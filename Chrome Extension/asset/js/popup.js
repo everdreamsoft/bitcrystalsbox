@@ -976,6 +976,7 @@ function timeConverter(UNIX_timestamp) {
 
 function loadTransactionsBTC(add, callback) {
     var source_html = "http://btc.blockr.io/api/v1/address/txs/" + add;
+    //console.log(source_html);
     $.getJSON(source_html, function (data) {
 	var btctxs = new Array();
 //        for (var i = 0; i < 100; i++) {
@@ -1001,10 +1002,11 @@ function loadTransactions(add, btctxs) {
     loadBvam(function (bvamdata, hashname, hashhash) {
 	loadTransactionsBTC(add, function (add, btctxs) { //{"address":"1CWpnJVCQ2hHtehW9jhVjT2Ccj9eo5dc2E","asset":"LTBCOIN","block":348621,"quantity":"-50000.00000000","status":"valid","time":1426978699,"tx_hash":"dc34bbbf3fa02619b2e086a3cde14f096b53dc91f49f43b697aaee3fdec22e86"}
 	    var source_html = "https://counterpartychain.io/api/transactions/" + add;
+	    //console.log(source_html);
 	    $.getJSON(source_html, function (data) {
 		var alltxs = new Array();
 		var xcptxs = new Array();
-//		console.log(data);
+		//console.log(btctxs);
 		if (data.success != 0) {
 		    $.each(data.data, function (i, item) {
 			var assetname = data.data[i].asset;
@@ -1018,7 +1020,7 @@ function loadTransactions(add, btctxs) {
 		} else {
 		    var alltxs = btctxs;
 		}
-//		console.log(alltxs);
+		//console.log(alltxs);
 		alltxs.sort(function (a, b) {
 		    return b.time_utc - a.time_utc;
 		});
